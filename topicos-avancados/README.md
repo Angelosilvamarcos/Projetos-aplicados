@@ -1,47 +1,40 @@
 # LogiControl — Tópicos Avançados em Administração
 
-## Simulação acadêmica
+## Estudo de caso acadêmico baseado em pesquisa pública
 
-Projeto desenvolvido como protótipo para o componente curricular Tópicos Avançados em Administração.
+O projeto utiliza informações públicas disponíveis na internet sobre uma organização real do setor logístico como referência para construir um **estudo de caso acadêmico**. A identidade utilizada no projeto é fictícia e os indicadores do protótipo são demonstrativos.
 
-### Empresa fictícia
-**LogiNova Transportes e Operações Ltda.**
+**Empresa acadêmica:** LogiVia Operações Integradas Ltda.  
+**Referência pública de pesquisa:** VLI Logística.
 
-Empresa criada exclusivamente para fins acadêmicos. Não representa uma empresa real e não utiliza marcas, logotipos ou dados reais.
+### Importante
+O projeto **não afirma que houve visita presencial ou entrevista**. As informações devem ser apresentadas como pesquisa documental/publicamente disponível, acompanhadas das respectivas fontes.
 
-### Desafio simulado
+## Solução
 
-Informações de operações, ocorrências e verificações de segurança estão distribuídas entre planilhas, mensagens e registros manuais, dificultando o acompanhamento, a priorização e a geração de indicadores.
+**LogiControl** — protótipo web para apoiar:
 
-### Solução proposta
+- gestão de operações;
+- gestão de riscos;
+- registro de ocorrências;
+- segurança operacional;
+- indicadores;
+- plano de ação;
+- acompanhamento gerencial.
 
-**LogiControl** — protótipo de sistema web para centralizar:
+## Estrutura
 
-- Dashboard operacional
-- Operações
-- Ocorrências
-- Segurança e checklists
-- Indicadores
-- Plano de ação
-- Modo de apresentação
+- `prototipo/` — aplicação web navegável;
+- `documentacao/` — projeto, metodologia, pesquisa e perguntas;
+- `apresentacao/` — roteiro da apresentação;
+- `evidencias/` — espaço para referências/evidências autorizadas.
 
-### Aviso
+## Regra de dados
 
-**SIMULAÇÃO ACADÊMICA — DADOS FICTÍCIOS**
+O projeto separa:
 
-Os dados apresentados no protótipo são exclusivamente demonstrativos. Eles não devem ser interpretados como resultados reais de uma visita empresarial.
+1. **Dados públicos** — informação encontrada nas fontes;
+2. **Interpretação acadêmica** — análise realizada pela equipe;
+3. **Dados simulados** — números criados apenas para demonstrar o protótipo.
 
-### Relação com a atividade
-
-O projeto será desenvolvido seguindo as etapas de Planejamento (Plan) e Execução (Do), conforme as orientações do componente curricular. A empresa e os dados simulados servem para antecipar a construção do protótipo; caso uma visita real seja realizada, as informações reais deverão ser registradas separadamente e somente após autorização da empresa.
-
-## Estrutura planejada
-
-- topicos-avancados/README.md
-- topicos-avancados/prototipo/
-- topicos-avancados/documentacao/
-- topicos-avancados/apresentacao/
-- topicos-avancados/evidencias/
-
----
-**Projeto acadêmico — Tópicos Avançados em Administração**
+Nenhum dado simulado deve ser apresentado como indicador real da empresa pesquisada.
