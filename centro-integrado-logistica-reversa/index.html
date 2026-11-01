@@ -51,7 +51,7 @@ import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 const canvas=document.querySelector('#scene'), viewport=document.querySelector('#viewport');
 const scene=new THREE.Scene(); scene.background=new THREE.Color('#102b37'); scene.fog=new THREE.Fog('#102b37',65,135);
 const camera=new THREE.PerspectiveCamera(48,1,.1,300); camera.position.set(0,112,24);
-const renderer=new THREE.WebGLRenderer({canvas,antialias:true,alpha:false});renderer.setPixelRatio(Math.min(devicePixelRatio,2));renderer.shadowMap.enabled=true;renderer.shadowMap.type=THREE.PCFSoftShadowMap;renderer.outputColorSpace=THREE.SRGBColorSpace;renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=1.15;
+const renderer=new THREE.WebGLRenderer({canvas,antialias:true,alpha:false});renderer.setPixelRatio(Math.min(window.devicePixelRatio||1,1.5));renderer.shadowMap.enabled=true;renderer.shadowMap.type=THREE.PCFSoftShadowMap;renderer.outputColorSpace=THREE.SRGBColorSpace;renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=1.15;
 const controls=new OrbitControls(camera,renderer.domElement);controls.enableDamping=true;controls.dampingFactor=.06;controls.maxPolarAngle=Math.PI*.48;controls.minDistance=8;controls.maxDistance=180;controls.target.set(0,0,2);controls.maxPolarAngle=Math.PI*.49;
 scene.add(new THREE.HemisphereLight(0xc9e8ff,0x35433b,2.1));
 const sun=new THREE.DirectionalLight(0xfff0d9,3.2);sun.position.set(-25,40,22);sun.castShadow=true;sun.shadow.mapSize.set(2048,2048);sun.shadow.camera.left=-55;sun.shadow.camera.right=55;sun.shadow.camera.top=55;sun.shadow.camera.bottom=-55;scene.add(sun);
@@ -153,7 +153,7 @@ function advance(){if(stage>=4){stage=-1;truck.position.copy(truckStart);animSta
 document.querySelector('#nextBtn').onclick=()=>{if(selectedShipment){startShipment()}else advance()};document.querySelector('#startBtn').onclick=()=>{if(selectedShipment){if(shipmentAnimating){shipmentAnimating=false;document.querySelector('#startBtn').textContent='▶ Retomar rastreio'}else{shipmentAnimating=true;shipmentLastTime=performance.now();document.querySelector('#startBtn').textContent='Ⅱ Pausar rastreio'}return}if(stage>=4){stage=-1;advance();running=true}else if(!running){running=true;if(stage<0)advance();document.querySelector('#startBtn').textContent='Ⅱ Pausar operação'}else{running=false;document.querySelector('#startBtn').textContent='▶ Continuar operação'}};
 const raycaster=new THREE.Raycaster(),pointer=new THREE.Vector2();let down=null;canvas.addEventListener('pointerdown',e=>{down={x:e.clientX,y:e.clientY}});
 canvas.addEventListener('pointerup',e=>{if(!down||Math.hypot(e.clientX-down.x,e.clientY-down.y)>7)return;const r=canvas.getBoundingClientRect();pointer.x=((e.clientX-r.left)/r.width)*2-1;pointer.y=-((e.clientY-r.top)/r.height)*2+1;raycaster.setFromCamera(pointer,camera);const hits=raycaster.intersectObjects(clickable,true);if(hits.length){let obj=hits[0].object;while(obj&& !obj.userData.sector&&!obj.userData.shipment)obj=obj.parent;if(obj?.userData.shipment||hits[0].object.userData.shipment){startShipment();return}let id=obj?.userData.sector||hits[0].object.userData.sector;if(id)setSector(id)}});
-function resize(){const w=viewport.clientWidth,h=viewport.clientHeight;if(!w||!h)return;renderer.setSize(w,h,false);camera.aspect=w/h;camera.updateProjectionMatrix()}new ResizeObserver(resize).observe(viewport);resize();
+function resize(){const w=viewport.clientWidth,h=viewport.clientHeight;if(!w||!h)return;renderer.setSize(w,h,false);camera.aspect=w/h;camera.updateProjectionMatrix()}if('ResizeObserver' in window){new ResizeObserver(resize).observe(viewport)}else{window.addEventListener('resize',resize)}resize();
 const clock=new THREE.Clock();function render(now){requestAnimationFrame(render);controls.update();if(camAnim){const k=Math.min(1,(now-camAnim.start)/camAnim.dur),e=k*k*(3-2*k);camera.position.lerpVectors(camAnim.from,camAnim.to,e);controls.target.lerpVectors(camAnim.tf,camAnim.tt,e);if(k>=1)camAnim=null}if(shipmentAnimating){
  const elapsed=Math.max(0,(now-shipmentLastTime)/1000);shipmentLastTime=now;
  shipmentProgress=Math.min(1,shipmentProgress+elapsed/32);
@@ -169,5 +169,5 @@ const clock=new THREE.Clock();function render(now){requestAnimationFrame(render)
 updateStage();
 // Recalcula a câmera após mudanças de orientação em celulares e tablets.
 window.addEventListener('orientationchange',()=>setTimeout(resize,180));
-window.addEventListener('error',e=>{if(e.message)console.error('[Centro Integrado 3D]',e.message)});
+window.addEventListener('error',e=>{if(e.message){console.error('[Centro Integrado 3D]',e.message);const t=document.querySelector('#toast');if(t){t.textContent='Erro ao carregar o 3D. Recarregue a página.';t.classList.add('show')}}});
 </script></body></html>
