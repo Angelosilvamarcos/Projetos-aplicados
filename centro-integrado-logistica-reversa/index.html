@@ -50,9 +50,9 @@ import * as THREE from "three";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 const canvas=document.querySelector('#scene'), viewport=document.querySelector('#viewport');
 const scene=new THREE.Scene(); scene.background=new THREE.Color('#102b37'); scene.fog=new THREE.Fog('#102b37',65,135);
-const camera=new THREE.PerspectiveCamera(42,1,.1,250); camera.position.set(34,52,42);
+const camera=new THREE.PerspectiveCamera(42,1,.1,250); camera.position.set(0,78,68);
 const renderer=new THREE.WebGLRenderer({canvas,antialias:true,alpha:false});renderer.setPixelRatio(Math.min(devicePixelRatio,2));renderer.shadowMap.enabled=true;renderer.shadowMap.type=THREE.PCFSoftShadowMap;renderer.outputColorSpace=THREE.SRGBColorSpace;renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=1.15;
-const controls=new OrbitControls(camera,renderer.domElement);controls.enableDamping=true;controls.dampingFactor=.06;controls.maxPolarAngle=Math.PI*.48;controls.minDistance=10;controls.maxDistance=100;controls.target.set(0,0,0);controls.maxPolarAngle=Math.PI*.49;
+const controls=new OrbitControls(camera,renderer.domElement);controls.enableDamping=true;controls.dampingFactor=.06;controls.maxPolarAngle=Math.PI*.48;controls.minDistance=8;controls.maxDistance=150;controls.target.set(0,0,2);controls.maxPolarAngle=Math.PI*.49;
 scene.add(new THREE.HemisphereLight(0xc9e8ff,0x35433b,2.1));
 const sun=new THREE.DirectionalLight(0xfff0d9,3.2);sun.position.set(-25,40,22);sun.castShadow=true;sun.shadow.mapSize.set(2048,2048);sun.shadow.camera.left=-55;sun.shadow.camera.right=55;sun.shadow.camera.top=55;sun.shadow.camera.bottom=-55;scene.add(sun);
 const mats={ground:mat('#a8b6b7'),asphalt:mat('#26343b'),concrete:mat('#c5ccca'),wall:mat('#d5dedb'),roof:mat('#234854'),steel:mat('#506772'),dark:mat('#182a31'),teal:mat('#20b9ac'),orange:mat('#ff9d43'),blue:mat('#4c9fe8'),grey:mat('#909fa5'),box:mat('#c28a50'),pallet:mat('#8b6845'),glass:mat('#4e8292'),white:mat('#edf2ed'),green:mat('#428d69'),red:mat('#c75b4d')};
@@ -95,12 +95,41 @@ const wh=warehouse(),of=office(),mg=management(),tr=triage(),fl=fleet();
 function forklift(parent,x,z){const g=new THREE.Group();g.position.set(x,0,z);parent.add(g);box(g,0,.8,0,1.6,.7,2,mats.orange);box(g,0,1.55,-.25,1.1,1.1,.12,mats.steel);box(g,0,1.4,.8,.12,1.7,.12,mats.dark);box(g,.45,1.4,.8,.12,1.7,.12,mats.dark);box(g,.25,.55,1.35,1.2,.12,.65,mats.steel);for(let wx of [-.65,.65])for(let wz of [-.55,.65])cyl(g,wx,.35,wz,.28,.22,mats.dark,Math.PI/2);return g}
 forklift(wh,9,4);forklift(wh,-7,5);
 const truck=makeTruck(scene,0,0,29,mats.teal);truck.userData.moving=true;
+const destination=zone('destino','Destino final',34,15,13,12,'#67b5f5');
+box(destination,0,.3,0,8,.5,7,mats.concrete);
+for(let i=0;i<3;i++){box(destination,-2.5+i*2.5,.8,0,1.8,.6,2,i===0?mats.green:i===1?mats.blue:mats.grey)}
+label('DESTINO FINAL',34,5,15,'#8ecbff',1.05);
 for(let i=0;i<12;i++){const x=-34+(i%6)*13,z=36+Math.floor(i/6)*2;box(scene,x,.3,z,1.3,.5,1.3,i%3===0?mats.orange:mats.green)}
 // Connecting information/physical routes are luminous raised paths.
 line(scene,[[-37, .3,13],[-37,.3,29],[-20,.3,29],[-10,.3,18],[-10,.3,9]],'#39d4c2',.09);
 line(scene,[[-8,.3,7],[-8,.3,13],[-8,.3,17]],'#ffad59',.09);
 line(scene,[[3,.3,17],[10,.3,17],[18,.3,5]],'#64b5f6',.08);
 line(scene,[[18,.3,-5],[18,.3,-14]],'#64b5f6',.07);
+// Rota contínua de rastreabilidade: recebimento → armazém → triagem → expedição → rua → destino.
+const routePoints=[
+[-37,.25,13],[-37,.25,29],[-24,.25,29],[-10,.25,20],[-10,.25,8],
+[-8,.25,13],[-8,.25,17],[3,.25,17],[12,.25,17],[22,.25,22],[32,.25,29],
+[37,.25,29],[37,.25,20],[34,.25,15]
+];
+line(scene,routePoints,'#39d4c2',.13);
+const shipment = new THREE.Group();
+const shipmentPallet=box(shipment,0,.22,0,1.8,.35,1.5,mats.pallet);
+const shipmentBox=box(shipment,0,.95,0,1.25,1.15,1.1,mats.orange);
+const shipmentTag=box(shipment,.2,1.15,.57,.38,.28,.04,mats.white,{cast:false});
+shipment.position.set(-37,0,13);shipment.userData={shipment:true};
+scene.add(shipment);clickable.push(shipmentBox);shipmentBox.userData.shipment=true;
+const shipmentGlow=new THREE.PointLight(0xffad59,2.5,8);shipmentGlow.position.set(0,2,0);shipment.add(shipmentGlow);
+const routeCurve = new THREE.CatmullRomCurve3(routePoints.map(p=>new THREE.Vector3(p[0],p[1]+.1,p[2])));
+let selectedShipment=false, shipmentProgress=0, shipmentAnimating=false, shipmentLastTime=0;
+function startShipment(){
+ selectedShipment=true;shipmentProgress=0;shipmentAnimating=true;shipmentLastTime=performance.now();
+ running=false;stage=0;updateStage();
+ document.querySelector('#panelTitle').textContent='Carga selecionada · Rastreio ativo';
+ document.querySelector('#panelDesc').textContent='A caixa percorre a rota física do centro: coleta, recebimento, armazém, triagem, expedição, transporte rodoviário e destino final.';
+ document.querySelector('#flowHeading').textContent='Rastreio desta caixa';
+ animateCamera(new THREE.Vector3(-18,35,40),new THREE.Vector3(-5,0,18));
+ toast('Rastreio iniciado: caixa identificada e rota ativada');
+}
 const sectorData={
 overview:{eyebrow:'VISÃO INTEGRADA',title:'A operação conectada',desc:'Explore a instalação em 3D. Selecione um setor para aproximar a câmera e entender suas responsabilidades e conexões.'},
 gestao:{eyebrow:'SETOR 01 · DECISÃO',title:'Gestão',desc:'Define prioridades, metas e padrões de serviço. Consolida indicadores de logística e custos administrativos para decidir ações corretivas.',items:['Acompanha nível de recuperação e prazo de retorno','Prioriza recursos e trata desvios','Recebe indicadores da Administração e da Logística'],pos:[25,18,13],target:[18,0,5]},
@@ -113,19 +142,30 @@ triagem:{eyebrow:'LOGÍSTICA REVERSA · DESTINAÇÃO',title:'Triagem reversa',de
 const stages=[['Coleta de retorno','Veículo coleta os materiais no cliente.'],['Recebimento','Carga é descarregada e identificada no centro.'],['Inspeção e triagem','Equipe registra condição e categoria de cada item.'],['Destinação','Itens seguem para reuso, reparo, reciclagem ou descarte.'],['Fechamento e indicadores','Estoque, custos e resultados alimentam Administração e Gestão.']];
 let stage=-1,running=false,animStart=0,truckStart=new THREE.Vector3(0,0,29),truckEnd=new THREE.Vector3(-29,0,3);
 function toast(s){const el=document.querySelector('#toast');el.textContent=s;el.classList.add('show');setTimeout(()=>el.classList.remove('show'),2200)}
-function setSector(id){const d=sectorData[id]||sectorData.overview;document.querySelector('#eyebrow').textContent=d.eyebrow;document.querySelector('#panelTitle').textContent=d.title;document.querySelector('#panelDesc').textContent=d.desc;document.querySelectorAll('.sectorBtn').forEach(b=>b.classList.toggle('active',b.dataset.sector===id));document.querySelector('#flowHeading').textContent=id==='overview'?'Fluxo de logística reversa':'Responsabilidades do setor';const f=document.querySelector('#flow');f.innerHTML='';const items=d.items||stages.map(s=>s[0]+' — '+s[1]);items.forEach((s,i)=>{const e=document.createElement('div');e.className='flowItem'+(i===stage?' active':'');e.innerHTML='<span class="num">'+String(i+1).padStart(2,'0')+'</span><span>'+s+'</span>';f.appendChild(e)});if(id!=='overview'){const p=new THREE.Vector3(...d.pos),t=new THREE.Vector3(...d.target);animateCamera(p,t);toast('Setor selecionado: '+d.title)}else{animateCamera(new THREE.Vector3(39,34,43),new THREE.Vector3(0,0,0))}}
+function setSector(id){const d=sectorData[id]||sectorData.overview;document.querySelector('#eyebrow').textContent=d.eyebrow;document.querySelector('#panelTitle').textContent=d.title;document.querySelector('#panelDesc').textContent=d.desc;document.querySelectorAll('.sectorBtn').forEach(b=>b.classList.toggle('active',b.dataset.sector===id));document.querySelector('#flowHeading').textContent=id==='overview'?'Fluxo de logística reversa':'Responsabilidades do setor';const f=document.querySelector('#flow');f.innerHTML='';const items=d.items||stages.map(s=>s[0]+' — '+s[1]);items.forEach((s,i)=>{const e=document.createElement('div');e.className='flowItem'+(i===stage?' active':'');e.innerHTML='<span class="num">'+String(i+1).padStart(2,'0')+'</span><span>'+s+'</span>';f.appendChild(e)});if(id!=='overview'){const p=new THREE.Vector3(...d.pos),t=new THREE.Vector3(...d.target);animateCamera(p,t);toast('Setor selecionado: '+d.title)}else{animateCamera(new THREE.Vector3(0,78,68),new THREE.Vector3(0,0,2))}}
 let camAnim=null;function animateCamera(pos,target){camAnim={from:camera.position.clone(),to:pos,tf:controls.target.clone(),tt:target,start:performance.now(),dur:850}}
 document.querySelectorAll('.sectorBtn').forEach(b=>b.addEventListener('click',()=>setSector(b.dataset.sector)));
-document.querySelector('#resetTop').onclick=()=>setSector('overview');
+document.querySelector('#resetTop').onclick=()=>{shipmentAnimating=false;selectedShipment=false;shipmentProgress=0;shipment.position.set(-37,0,13);truck.position.set(0,0,29);setSector('overview');updateStage()};
 document.querySelector('#orbitBtn').onclick=()=>{controls.autoRotate=!controls.autoRotate;controls.autoRotateSpeed=.7;document.querySelector('#orbitBtn').textContent=controls.autoRotate?'⏸ Parar órbita':'⟳ Órbita'};
 document.querySelector('#labelsBtn').onclick=()=>{labelsOn=!labelsOn;scene.traverse(o=>{if(o.userData.isLabel)o.visible=labelsOn});document.querySelector('#labelsBtn').textContent='Etiquetas: '+(labelsOn?'ON':'OFF')};
 function updateStage(){const i=Math.max(0,stage);document.querySelector('#mStep').textContent=String(i+1).padStart(2,'0')+'/05';document.querySelector('#progress').style.width=((i+1)/5*100)+'%';document.querySelector('#flowPct').textContent=Math.round((i+1)/5*100)+'%';document.querySelector('#flowStatus').textContent=stage<0?'Pronto para iniciar':stages[i][0];document.querySelector('#mItems').textContent=[128,128,124,92,92][i];document.querySelector('#mRecovery').textContent=['72%','72%','69%','72%','72%'][i];document.querySelector('#flow').innerHTML='';stages.forEach((s,j)=>{const e=document.createElement('div');e.className='flowItem'+(j===stage?' active':'');e.innerHTML='<span class="num">'+String(j+1).padStart(2,'0')+'</span><span><b>'+s[0]+'</b><br>'+s[1]+'</span>';document.querySelector('#flow').appendChild(e)});document.querySelector('#flowHeading').textContent='Fluxo de logística reversa';document.querySelector('#flowStatus').textContent=stage<0?'Pronto para iniciar':stages[stage][0];document.querySelector('#startBtn').textContent=running?'Ⅱ Pausar operação':stage>=4?'↻ Reiniciar operação':'▶ '+(stage<0?'Iniciar operação':'Continuar operação')}
 function advance(){if(stage>=4){stage=-1;truck.position.copy(truckStart);animStart=performance.now();updateStage();return}stage++;animStart=performance.now();if(stage===0){truck.position.copy(truckStart);animateCamera(new THREE.Vector3(-37,13,39),new THREE.Vector3(-25,0,24));toast('Etapa 1: veículo inicia a coleta de retorno')}if(stage===1){animateCamera(new THREE.Vector3(-20,15,13),new THREE.Vector3(-10,0,-5));toast('Etapa 2: recebimento no armazém')}if(stage===2){animateCamera(new THREE.Vector3(-4,12,28),new THREE.Vector3(-8,0,17));toast('Etapa 3: inspeção e triagem')}if(stage===3){animateCamera(new THREE.Vector3(0,15,25),new THREE.Vector3(-8,0,17));toast('Etapa 4: materiais seguem à destinação')}if(stage===4){animateCamera(new THREE.Vector3(24,17,6),new THREE.Vector3(10,0,-3));toast('Etapa 5: dados consolidados para Administração e Gestão')}updateStage()}
-document.querySelector('#nextBtn').onclick=advance;document.querySelector('#startBtn').onclick=()=>{if(stage>=4){stage=-1;advance();running=true}else if(!running){running=true;if(stage<0)advance();document.querySelector('#startBtn').textContent='Ⅱ Pausar operação'}else{running=false;document.querySelector('#startBtn').textContent='▶ Continuar operação'}};
+document.querySelector('#nextBtn').onclick=()=>{if(selectedShipment){startShipment()}else advance()};document.querySelector('#startBtn').onclick=()=>{if(selectedShipment){if(shipmentAnimating){shipmentAnimating=false;document.querySelector('#startBtn').textContent='▶ Retomar rastreio'}else{shipmentAnimating=true;shipmentLastTime=performance.now();document.querySelector('#startBtn').textContent='Ⅱ Pausar rastreio'}return}if(stage>=4){stage=-1;advance();running=true}else if(!running){running=true;if(stage<0)advance();document.querySelector('#startBtn').textContent='Ⅱ Pausar operação'}else{running=false;document.querySelector('#startBtn').textContent='▶ Continuar operação'}};
 const raycaster=new THREE.Raycaster(),pointer=new THREE.Vector2();let down=null;canvas.addEventListener('pointerdown',e=>{down={x:e.clientX,y:e.clientY}});
-canvas.addEventListener('pointerup',e=>{if(!down||Math.hypot(e.clientX-down.x,e.clientY-down.y)>7)return;const r=canvas.getBoundingClientRect();pointer.x=((e.clientX-r.left)/r.width)*2-1;pointer.y=-((e.clientY-r.top)/r.height)*2+1;raycaster.setFromCamera(pointer,camera);const hits=raycaster.intersectObjects(clickable,true);if(hits.length){let id=hits[0].object.userData.sector; if(id)setSector(id)}});
+canvas.addEventListener('pointerup',e=>{if(!down||Math.hypot(e.clientX-down.x,e.clientY-down.y)>7)return;const r=canvas.getBoundingClientRect();pointer.x=((e.clientX-r.left)/r.width)*2-1;pointer.y=-((e.clientY-r.top)/r.height)*2+1;raycaster.setFromCamera(pointer,camera);const hits=raycaster.intersectObjects(clickable,true);if(hits.length){let obj=hits[0].object;while(obj&& !obj.userData.sector&&!obj.userData.shipment)obj=obj.parent;if(obj?.userData.shipment||hits[0].object.userData.shipment){startShipment();return}let id=obj?.userData.sector||hits[0].object.userData.sector;if(id)setSector(id)}});
 function resize(){const w=viewport.clientWidth,h=viewport.clientHeight;if(!w||!h)return;renderer.setSize(w,h,false);camera.aspect=w/h;camera.updateProjectionMatrix()}new ResizeObserver(resize).observe(viewport);resize();
-const clock=new THREE.Clock();function render(now){requestAnimationFrame(render);controls.update();if(camAnim){const k=Math.min(1,(now-camAnim.start)/camAnim.dur),e=k*k*(3-2*k);camera.position.lerpVectors(camAnim.from,camAnim.to,e);controls.target.lerpVectors(camAnim.tf,camAnim.tt,e);if(k>=1)camAnim=null}if(running&&stage>=0&&stage<4){const t=(now-animStart)/1000;truck.position.x=truckStart.x+Math.sin(t*.45)*7;truck.position.z=29-Math.min(1,(t%12)/12)*24}renderer.render(scene,camera)}requestAnimationFrame(render);
+const clock=new THREE.Clock();function render(now){requestAnimationFrame(render);controls.update();if(camAnim){const k=Math.min(1,(now-camAnim.start)/camAnim.dur),e=k*k*(3-2*k);camera.position.lerpVectors(camAnim.from,camAnim.to,e);controls.target.lerpVectors(camAnim.tf,camAnim.tt,e);if(k>=1)camAnim=null}if(shipmentAnimating){
+ const elapsed=Math.max(0,(now-shipmentLastTime)/1000);shipmentLastTime=now;
+ shipmentProgress=Math.min(1,shipmentProgress+elapsed/32);
+ const p=routeCurve.getPointAt(shipmentProgress);
+ shipment.position.set(p.x,0,p.z);
+ const tangent=routeCurve.getTangentAt(Math.min(.999,shipmentProgress));
+ shipment.rotation.y=Math.atan2(tangent.x,tangent.z);
+ truck.position.set(p.x,0,p.z-3);
+ const nextStage=shipmentProgress<.12?0:shipmentProgress<.3?1:shipmentProgress<.52?2:shipmentProgress<.78?3:4;
+ if(nextStage!==stage){stage=nextStage;updateStage();document.querySelector('#panelTitle').textContent='Carga selecionada · Rastreio ativo';document.querySelector('#panelDesc').textContent='Etapa atual: '+stages[stage][0]+'. A caixa segue o caminho marcado até a conclusão do transporte.'}
+ if(shipmentProgress>=1){shipmentAnimating=false;stage=4;updateStage();document.querySelector('#panelTitle').textContent='Entrega concluída';document.querySelector('#panelDesc').textContent='A caixa chegou ao destino final. O rastreio foi encerrado e a movimentação está concluída.';toast('Entrega concluída: caixa chegou ao destino final')}
+}renderer.render(scene,camera)}requestAnimationFrame(render);
 updateStage();
 // Recalcula a câmera após mudanças de orientação em celulares e tablets.
 window.addEventListener('orientationchange',()=>setTimeout(resize,180));
