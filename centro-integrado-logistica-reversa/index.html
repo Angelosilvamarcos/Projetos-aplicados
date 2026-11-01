@@ -68,8 +68,7 @@ for(let x=-42;x<=42;x+=5)box(scene,x,.07,29,.12,.025,4.2,mat('#d7c98a'),{cast:fa
 for(let z=-15;z<=22;z+=5)box(scene,-37,.07,z,4,.025,.12,mat('#d7c98a'),{cast:false});
 const clickable=[],sectorGroups={};let labelsOn=true;
 function zone(id,title,x,z,w,d,color){const g=new THREE.Group();g.position.set(x,0,z);g.userData.sector=id;scene.add(g);sectorGroups[id]=g;const plate=box(g,0,.09,0,w,.12,d,mat(color,.9),{cast:false});plate.material.transparent=true;plate.material.opacity=.17;plate.userData.sector=id;clickable.push(plate);const outline=new THREE.LineSegments(new THREE.EdgesGeometry(new THREE.BoxGeometry(w,.18,d)),new THREE.LineBasicMaterial({color,transparent:true,opacity:.75}));outline.position.y=.16;g.add(outline);return g}
-function warehouse(){const g=zone('armazem','Armazém',-10,-5,34,25,'#39d4c2');box(g,0,5,0,32,10,23,mats.wall); // building volume
-// open-front facade and roof slabs make a cutaway-style interior
+function warehouse(){const g=zone('armazem','Armazém',-10,-5,34,25,'#39d4c2');// Open-front cutaway shell: walls and roof are separate meshes so the interior remains visible.
 box(g,0,10.2,0,33,.45,24,mats.roof);box(g,0,4.8,-11.7,33,9.5,.5,mats.roof);box(g,-16,4.8,0,.5,9.5,24,mats.roof);box(g,16,4.8,0,.5,9.5,24,mats.roof);
 for(let x=-13;x<=13;x+=6){box(g,x,5,11.1,.35,10,.35,mats.steel);box(g,x,5,-11.1,.35,10,.35,mats.steel)}
 // racks
