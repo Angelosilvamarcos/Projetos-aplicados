@@ -44,10 +44,11 @@ main{min-height:0;display:grid;grid-template-columns:minmax(0,1fr) 320px;gap:12p
 <div class="section"><h3 id="flowHeading">Fluxo de logística reversa</h3><div class="flow" id="flow"></div><div class="bar"><span id="progress"></span></div><div class="statusline" style="margin-top:8px"><span id="flowStatus">Pronto para iniciar</span><span id="flowPct">0%</span></div></div>
 <div style="display:flex;gap:8px"><button class="primary" id="startBtn" style="flex:1">▶ Iniciar operação</button><button id="nextBtn">Próxima etapa ↗</button></div>
 <div class="footerNote">Modelo conceitual para fins acadêmicos. Indicadores e quantidades são demonstrativos, não representam dados operacionais reais.</div></aside></main></div>
-<script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/"}}</script>
-<script type="module">
-import * as THREE from "three";
-import { OrbitControls } from "three/addons/controls/OrbitControls.js";
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/0.160.0/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.160.0/examples/js/controls/OrbitControls.js"></script>
+<script>
+if(!window.THREE || !window.THREE.OrbitControls){throw new Error("Biblioteca 3D não carregou; confira a conexão com a internet.");}
+const OrbitControls = THREE.OrbitControls;
 const canvas=document.querySelector('#scene'), viewport=document.querySelector('#viewport');
 const scene=new THREE.Scene(); scene.background=new THREE.Color('#102b37'); scene.fog=new THREE.Fog('#102b37',65,135);
 const camera=new THREE.PerspectiveCamera(48,1,.1,300); camera.position.set(0,112,24);
