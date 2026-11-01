@@ -31,6 +31,23 @@ main{min-height:0;display:grid;grid-template-columns:minmax(0,1fr) 320px;gap:12p
 #toast{position:absolute;left:50%;top:72px;transform:translate(-50%,-8px);opacity:0;pointer-events:none;background:#153844;border:1px solid #3a6c78;border-radius:10px;padding:10px 14px;font-size:12px;transition:.25s;z-index:4;white-space:normal;text-align:center;max-width:90%}#toast.show{opacity:1;transform:translate(-50%,0)}
 @media(max-width:900px), (pointer:coarse){header{padding:10px 12px}.sub{display:none}main{grid-template-columns:1fr;grid-template-rows:minmax(290px,48vh) minmax(0,1fr);padding:8px;gap:8px}#panel{padding:13px;gap:10px;border-radius:14px}.title{font-size:18px}.metrics{grid-template-columns:repeat(4,minmax(0,1fr))}.metric{padding:8px}.metric strong{font-size:16px}.metric label{font-size:9px}.metric small{font-size:9px}.sectors{grid-template-columns:repeat(3,minmax(0,1fr))}.sectorBtn{padding:7px;min-height:38px;font-size:10px}.sectorBtn .ico{width:21px;height:21px;flex-shrink:0}.footerNote{margin-top:0}.legend{max-width:100%;bottom:10px}.hint{display:none}.viewControls button{padding:7px;font-size:10px}.badge{font-size:10px;padding:7px 8px}}
 @media(max-width:390px), (pointer:coarse) and (max-width:520px){.metrics{grid-template-columns:1fr 1fr}.sectorBtn{font-size:10px}.sectors{grid-template-columns:1fr 1fr}.brand h1{font-size:12px}.live{display:none}#app{height:100dvh;min-height:100svh}main{grid-template-rows:minmax(270px,43dvh) minmax(0,1fr);overflow:hidden}#viewport{min-height:270px}#panel{overflow-y:auto;overscroll-behavior:contain}.metrics{grid-template-columns:1fr 1fr}}
+
+/* Layout móvel forçado mesmo quando o navegador usa modo computador. */
+html.mobile-layout,body.mobile-layout{height:100%;min-height:100%;overflow:hidden}
+body.mobile-layout #app{height:100dvh;min-height:100svh;grid-template-rows:auto minmax(0,1fr)}
+body.mobile-layout main{min-height:0;grid-template-columns:minmax(0,1fr);grid-template-rows:minmax(250px,43dvh) minmax(0,1fr);padding:7px;gap:7px;overflow:hidden}
+body.mobile-layout #viewport{min-height:0;height:100%;border-radius:12px}
+body.mobile-layout #panel{min-height:0;overflow-y:auto;overscroll-behavior:contain;padding:11px;gap:9px;border-radius:12px}
+body.mobile-layout .metrics{grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}
+body.mobile-layout .metric{padding:7px}body.mobile-layout .metric strong{font-size:16px}
+body.mobile-layout .sectors{grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}
+body.mobile-layout .sectorBtn{min-height:36px;padding:6px;font-size:10px}body.mobile-layout .sectorBtn .ico{width:21px;height:21px}
+body.mobile-layout .sub,body.mobile-layout .live,body.mobile-layout .hint{display:none}
+body.mobile-layout header{padding:8px 10px;gap:6px}body.mobile-layout .logo{width:30px;height:30px}body.mobile-layout h1{font-size:11px}
+body.mobile-layout main .title{font-size:16px}
+body.mobile-layout .legend{left:7px;bottom:7px;gap:4px;max-width:96%}body.mobile-layout .legend span{font-size:8px;padding:4px}
+body.mobile-layout .viewControls button{font-size:9px;padding:6px}
+@media(max-height:700px){body.mobile-layout main{grid-template-rows:minmax(220px,39dvh) minmax(0,1fr)}body.mobile-layout #panel{gap:7px;padding:9px}}
 </style></head>
 <body><div id="app">
 <header><div class="brand"><div class="logo">↻</div><div><h1>CENTRO INTEGRADO · LOGÍSTICA REVERSA</h1><div class="sub">Gêmeo digital operacional · Projeto acadêmico</div></div></div><div class="headerRight"><span class="live"><i class="dot"></i> SIMULAÇÃO ATIVA</span><button id="resetTop">Visão geral</button></div></header>
@@ -51,6 +68,9 @@ main{min-height:0;display:grid;grid-template-columns:minmax(0,1fr) 320px;gap:12p
 import * as THREE from "three";
 import { OrbitControls } from "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/controls/OrbitControls.js";
 const canvas=document.querySelector('#scene'), viewport=document.querySelector('#viewport');
+// Força a disposição vertical em celulares/tablets mesmo com "Versão para computador".
+function applyDeviceLayout(){const mobile=window.innerWidth<=900||window.screen.width<=900||window.matchMedia('(pointer:coarse)').matches;document.documentElement.classList.toggle('mobile-layout',mobile);document.body.classList.toggle('mobile-layout',mobile);requestAnimationFrame(()=>{if(typeof resize==='function')resize()})}
+applyDeviceLayout();window.addEventListener('resize',applyDeviceLayout);window.addEventListener('orientationchange',()=>setTimeout(applyDeviceLayout,220));
 const scene=new THREE.Scene(); scene.background=new THREE.Color('#102b37'); scene.fog=new THREE.Fog('#102b37',65,135);
 const camera=new THREE.PerspectiveCamera(48,1,.1,300); camera.position.set(0,112,24);
 const renderer=new THREE.WebGLRenderer({canvas,antialias:true,alpha:false});renderer.setPixelRatio(Math.min(window.devicePixelRatio||1,1.5));renderer.shadowMap.enabled=true;renderer.shadowMap.type=THREE.PCFSoftShadowMap;renderer.outputColorSpace=THREE.SRGBColorSpace;renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=1.15;
