@@ -1,137 +1,126 @@
 <!doctype html>
 <html lang="pt-BR">
 <head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="theme-color" content="#081b29">
-<title>Centro Integrado | Gestão e Logística Reversa</title>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="theme-color" content="#071923"><title>Centro Integrado | Logística Reversa 3D</title>
 <style>
-:root{--navy:#081b29;--panel:#0d2636;--line:#27485a;--cyan:#55d9dc;--text:#edf7fa;--muted:#a6bdc8;--lime:#a9d86d}
-*{box-sizing:border-box}body{margin:0;background:var(--navy);color:var(--text);font:14px/1.45 system-ui,-apple-system,Segoe UI,Arial}header{height:66px;padding:10px 18px;display:flex;align-items:center;gap:12px;background:#071722;border-bottom:1px solid var(--line)}.logo{font-size:23px;background:#0e667a;border-radius:10px;padding:7px 11px}header strong{font-size:12px;letter-spacing:.5px}header small{display:block;color:var(--muted);font-size:10px}main{display:grid;grid-template-columns:minmax(0,1.65fr) minmax(320px,.85fr);min-height:calc(100vh - 92px)}.world{min-height:680px;position:relative;overflow:hidden;background:radial-gradient(ellipse at 48% 45%,#214b5b,#0c2534 78%)}.worldtop{position:absolute;z-index:4;top:15px;left:16px;right:16px;display:flex;justify-content:space-between;align-items:flex-start;gap:8px;pointer-events:none}.tag{background:#071a26d9;border:1px solid #426374;border-radius:20px;padding:7px 10px;font-size:10px;color:#d8edf1}.worldtop button{pointer-events:auto;border:1px solid #517182;background:#0a2230;color:#fff;border-radius:20px;padding:8px 12px;cursor:pointer}svg#campus{width:100%;height:100%;min-height:680px;display:block;touch-action:pan-y}.scene{transform-origin:0 0;transition:transform 1.15s cubic-bezier(.2,.75,.2,1)}.hotspot{cursor:pointer;outline:none}.hotspot:hover .outline,.hotspot:focus .outline{stroke:#71f5f0;stroke-width:5;filter:drop-shadow(0 0 8px #4ad6d5)}.hotspot text{font-family:system-ui,Arial;pointer-events:none;font-weight:750;letter-spacing:.7px}.pathline{fill:none;stroke:#6ee6d9;stroke-width:5;stroke-dasharray:12 10;opacity:.88}.truck{transition:transform 2.8s cubic-bezier(.4,0,.2,1)}.legend{position:absolute;bottom:14px;left:14px;right:14px;background:#061824e8;border:1px solid #294a5b;border-radius:11px;padding:9px 12px;color:#a9c2cc;font-size:10px;display:flex;justify-content:space-between;gap:8px}.side{background:linear-gradient(180deg,#0d2636,#081a26);border-left:1px solid var(--line);padding:20px;overflow:auto}.eyebrow{color:var(--cyan);font-size:10px;font-weight:800;letter-spacing:1.5px}.side h1{font-size:24px;line-height:1.15;margin:7px 0 9px}.desc{color:var(--muted);font-size:12px;margin:0 0 16px}.sectorbuttons{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin:15px 0}.sectorbuttons button,.action,.secondary{background:#122f40;color:#eaf6f8;border:1px solid #2a4b5c;border-radius:8px;padding:10px 6px;font-size:11px;cursor:pointer}.sectorbuttons button.active{border-color:var(--cyan);background:#164655}.kpis{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}.kpi,.info{background:#102c3d;border:1px solid #27485a;border-radius:10px;padding:12px}.kpi small{font-size:10px;color:var(--muted)}.kpi strong{display:block;font-size:23px;margin-top:2px}.kpi span{font-size:9px;color:#86b7c2}.sectiontitle{font-size:12px;margin:17px 0 8px}.info{margin-top:8px}.info b{font-size:12px;display:block;margin-bottom:4px}.info p{font-size:11px;color:var(--muted);margin:0}.action{width:100%;margin-top:12px;background:#15505b;border-color:#4bd0d1;font-weight:750;padding:12px}.secondary{width:100%;margin-top:7px}.notice{background:#382f20;border-left:3px solid #e7bd65;padding:9px;margin-top:12px;color:#e8d7b0;font-size:10px}footer{padding:9px 14px;color:#8ba8b6;font-size:10px;border-top:1px solid var(--line)}@media(max-width:760px){main{grid-template-columns:1fr}.world{min-height:540px;height:60vh;max-height:700px}.worldtop{top:9px;left:9px;right:9px}.tag{font-size:9px}svg#campus{min-height:540px}.legend{bottom:8px;left:8px;right:8px;font-size:9px}.side{border-left:0;border-top:1px solid var(--line);padding:17px}.side h1{font-size:22px}}@media(min-width:1200px){.world{height:calc(100vh - 92px)}svg#campus{height:100%}}
-</style>
-</head>
-<body>
-<header><div class="logo">↻</div><div><strong>CENTRO INTEGRADO · GESTÃO E LOGÍSTICA REVERSA</strong><small>Gêmeo digital acadêmico · Gestão + Administração + Operação</small></div></header>
-<main>
-<section class="world">
-<div class="worldtop"><span class="tag" id="viewTag">VISÃO GERAL DA EMPRESA</span><button id="overviewBtn">↗ Visão geral</button></div>
-<svg id="campus" viewBox="0 0 1000 760" role="img" aria-label="Planta isométrica interativa da empresa">
-<defs>
-<linearGradient id="ground" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#416b6d"/><stop offset="1" stop-color="#203e49"/></linearGradient>
-<linearGradient id="roof" x1="0" y1="0" x2="0.8" y2="1"><stop stop-color="#e6f0ed"/><stop offset="1" stop-color="#9cb8ba"/></linearGradient>
-<linearGradient id="glass" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#347386"/><stop offset="1" stop-color="#163d50"/></linearGradient>
-<filter id="shadow" x="-30%" y="-30%" width="170%" height="180%"><feDropShadow dx="8" dy="12" stdDeviation="7" flood-color="#06131b" flood-opacity=".5"/></filter>
-</defs>
-<g class="scene" id="scene">
-<!-- terreno e vias -->
-<polygon points="95,250 570,70 930,285 455,520" fill="url(#ground)" stroke="#789b98" stroke-width="3"/>
-<polygon points="115,247 570,83 900,283 454,494" fill="none" stroke="#d3d8b5" stroke-width="3" stroke-dasharray="18 12"/>
-<path d="M140 255 L455 450 L880 285 M455 450 L570 105" fill="none" stroke="#718a8b" stroke-width="22" opacity=".8"/>
-<path d="M140 255 L455 450 L880 285 M455 450 L570 105" fill="none" stroke="#d3d9ca" stroke-width="2" stroke-dasharray="10 10"/>
-<!-- área administrativa -->
-<g class="hotspot" tabindex="0" role="button" data-focus="administracao" data-title="Administração" aria-label="Entrar na Administração">
-<polygon class="outline" points="180,218 300,172 390,225 270,274" fill="#477c82" stroke="#a5d4d3" stroke-width="2"/>
-<polygon points="180,218 270,274 270,344 180,290" fill="#275365" stroke="#8ab4bc" stroke-width="2"/>
-<polygon points="270,274 390,225 390,293 270,344" fill="#1a4557" stroke="#8ab4bc" stroke-width="2"/>
-<polygon points="180,218 300,172 390,225 270,274" fill="url(#roof)" stroke="#f1f6ed" stroke-width="2"/>
-<path d="M204 222 L296 187 L357 223 L265 259 Z" fill="#5b8c91"/><path d="M221 222 L286 198 M239 231 L304 207 M257 240 L322 216" stroke="#d4eeee" stroke-width="3"/>
-<text x="282" y="281" font-size="15" text-anchor="middle" fill="#fff">ADMINISTRAÇÃO</text>
-<text x="282" y="300" font-size="10" text-anchor="middle" fill="#d4e8e9">Financeiro · Compras · Registros</text>
-</g>
-<!-- sala de gestão -->
-<g class="hotspot" tabindex="0" role="button" data-focus="gestao" aria-label="Entrar na Gestão">
-<polygon class="outline" points="410,153 506,117 575,158 479,198" fill="#497e85" stroke="#a5d4d3" stroke-width="2"/>
-<polygon points="410,153 479,198 479,249 410,207" fill="#2b5b6a" stroke="#8ab4bc" stroke-width="2"/>
-<polygon points="479,198 575,158 575,211 479,249" fill="#214a5c" stroke="#8ab4bc" stroke-width="2"/>
-<polygon points="410,153 506,117 575,158 479,198" fill="#d3e5de" stroke="#f1f6ed" stroke-width="2"/>
-<path d="M435 155 L506 130 L549 157 L478 184 Z" fill="#548b8d"/>
-<ellipse cx="490" cy="158" rx="23" ry="9" fill="#d9e6d8"/><circle cx="471" cy="155" r="4" fill="#183747"/><circle cx="492" cy="147" r="4" fill="#183747"/><circle cx="512" cy="159" r="4" fill="#183747"/>
-<text x="493" y="214" font-size="14" text-anchor="middle" fill="#fff">GESTÃO</text><text x="493" y="230" font-size="9" text-anchor="middle" fill="#d4e8e9">Sala de reuniões · Indicadores</text>
-</g>
-<!-- galpão logístico -->
-<g class="hotspot" tabindex="0" role="button" data-focus="logistica" aria-label="Entrar na operação logística">
-<polygon class="outline" points="305,330 525,246 690,345 470,432" fill="#3c727d" stroke="#a5d4d3" stroke-width="3"/>
-<polygon points="305,330 470,432 470,527 305,424" fill="#295365" stroke="#9fc7c8" stroke-width="2"/>
-<polygon points="470,432 690,345 690,439 470,527" fill="#1b4558" stroke="#9fc7c8" stroke-width="2"/>
-<polygon points="305,330 525,246 690,345 470,432" fill="url(#roof)" stroke="#e7f2ed" stroke-width="3"/>
-<!-- roof panels -->
-<path d="M340 330 L522 261 M365 345 L547 276 M392 361 L574 291 M418 377 L600 306 M444 392 L626 321 M470 408 L652 336" stroke="#a4c5c5" stroke-width="5"/>
-<!-- dock doors -->
-<g fill="#183e50" stroke="#90b6bc" stroke-width="2"><polygon points="495,443 524,431 524,474 495,487"/><polygon points="540,425 569,413 569,456 540,468"/><polygon points="585,407 614,395 614,438 585,450"/><polygon points="630,389 659,377 659,420 630,432"/></g>
-<text x="485" y="356" font-size="18" text-anchor="middle" fill="#143746">CENTRO LOGÍSTICO</text>
-<text x="485" y="375" font-size="11" text-anchor="middle" fill="#234b57">Recebimento · Separação · Expedição</text>
-</g>
-<!-- triagem -->
-<g class="hotspot" tabindex="0" role="button" data-focus="triagem" aria-label="Entrar na triagem reversa">
-<polygon class="outline" points="615,275 690,246 752,284 677,314" fill="#6b8b65" stroke="#c4e4a2" stroke-width="2"/>
-<polygon points="615,275 677,314 677,365 615,326" fill="#365e51" stroke="#b3d3a1" stroke-width="2"/>
-<polygon points="677,314 752,284 752,334 677,365" fill="#294c43" stroke="#b3d3a1" stroke-width="2"/>
-<polygon points="615,275 690,246 752,284 677,314" fill="#a8cb8b" stroke="#d8edbe" stroke-width="2"/>
-<rect x="644" y="277" width="22" height="13" fill="#497d5c"/><rect x="673" y="288" width="22" height="13" fill="#e4d4aa"/><rect x="699" y="281" width="22" height="13" fill="#5c9b9b"/>
-<text x="683" y="334" font-size="12" text-anchor="middle" fill="#fff">TRIAGEM</text><text x="683" y="349" font-size="9" text-anchor="middle" fill="#e0f0d8">Inspeção · Classificação</text>
-</g>
-<!-- estoque e destino -->
-<g class="hotspot" tabindex="0" role="button" data-focus="estoque" aria-label="Entrar no estoque reverso">
-<polygon class="outline" points="722,369 790,343 840,374 772,401" fill="#9a8459" stroke="#e8d6a9" stroke-width="2"/>
-<polygon points="722,369 772,401 772,447 722,416" fill="#705e40" stroke="#d8c69b" stroke-width="2"/>
-<polygon points="772,401 840,374 840,420 772,447" fill="#594c36" stroke="#d8c69b" stroke-width="2"/>
-<polygon points="722,369 790,343 840,374 772,401" fill="#d4bd8c" stroke="#f0dfb5" stroke-width="2"/>
-<g fill="#94754d"><rect x="742" y="370" width="19" height="13"/><rect x="764" y="379" width="19" height="13"/><rect x="784" y="369" width="19" height="13"/></g>
-<text x="779" y="421" font-size="12" text-anchor="middle" fill="#fff">ESTOQUE</text><text x="779" y="435" font-size="9" text-anchor="middle" fill="#f1e6cb">Reuso · Reciclagem</text>
-</g>
-<!-- cliente/coleta -->
-<g class="hotspot" tabindex="0" role="button" data-focus="cliente" aria-label="Entrar no ponto de coleta do cliente">
-<polygon class="outline" points="105,352 177,325 232,359 160,388" fill="#5b7d9c" stroke="#a9d2ee" stroke-width="2"/>
-<polygon points="105,352 160,388 160,434 105,397" fill="#31516c" stroke="#a9d2ee" stroke-width="2"/>
-<polygon points="160,388 232,359 232,405 160,434" fill="#203f59" stroke="#a9d2ee" stroke-width="2"/>
-<polygon points="105,352 177,325 232,359 160,388" fill="#b9d8e8" stroke="#e5f4ff" stroke-width="2"/>
-<rect x="130" y="352" width="27" height="17" fill="#527e9b"/><rect x="163" y="362" width="26" height="16" fill="#527e9b"/>
-<text x="167" y="414" font-size="12" text-anchor="middle" fill="#fff">CLIENTE</text><text x="167" y="428" font-size="9" text-anchor="middle" fill="#e2f2ff">Solicitação · Coleta</text>
-</g>
-<!-- caminhos de material -->
-<path id="route" class="pathline" d="M195 390 C245 430 278 435 330 412 S410 390 462 408 S550 425 640 325 S730 362 775 390" marker-end="url(#arrow)"/>
-<defs><marker id="arrow" markerWidth="8" markerHeight="8" refX="5" refY="3" orient="auto"><path d="M0,0 L0,6 L6,3 z" fill="#6ee6d9"/></marker></defs>
-<!-- caminhão -->
-<g id="truck" class="truck" transform="translate(220 420)" style="cursor:pointer" tabindex="0" role="button" aria-label="Selecionar caminhão e simular rota">
-<rect x="-20" y="-19" width="37" height="22" rx="3" fill="#b5db70" stroke="#efffc6" stroke-width="2"/><path d="M17 -14 L30 -14 L39 -3 L39 3 L17 3 Z" fill="#e0e9e7" stroke="#efffc6" stroke-width="2"/><rect x="21" y="-11" width="9" height="8" fill="#37748a"/><circle cx="-9" cy="6" r="6" fill="#081823" stroke="#9bb9c4" stroke-width="2"/><circle cx="28" cy="6" r="6" fill="#081823" stroke="#9bb9c4" stroke-width="2"/><text x="7" y="-5" font-size="8" text-anchor="middle" fill="#233b26" font-weight="900">REV</text>
-</g>
-<text x="493" y="585" fill="#c6e2e5" font-size="14" text-anchor="middle" letter-spacing="2">FLUXO INTEGRADO DA EMPRESA</text>
-<text x="493" y="608" fill="#91b6c1" font-size="11" text-anchor="middle">Solicitação → Coleta → Retorno → Triagem → Destinação</text>
-</g></svg>
-<div class="legend"><span>◉ Toque em um prédio para entrar no ambiente</span><span>Arraste para explorar · Use “Visão geral” para sair</span></div>
-</section>
-<aside class="side">
-<div class="eyebrow" id="eyebrow">PAINEL OPERACIONAL DINÂMICO</div><h1 id="title">Uma empresa. Três áreas conectadas.</h1><p class="desc" id="desc">Selecione Gestão, Administração ou Logística na maquete. A câmera se aproxima do ambiente e mostra o trabalho daquela equipe.</p>
-<div class="sectorbuttons"><button data-open="gestao">Gestão</button><button data-open="administracao">Administração</button><button data-open="logistica">Logística</button><button data-open="transporte">Transporte</button><button data-open="triagem">Triagem</button><button data-open="estoque">Estoque reverso</button></div>
-<div class="kpis"><div class="kpi"><small id="k1label">Coletas pendentes</small><strong id="k1">08</strong><span>Indicador demonstrativo</span></div><div class="kpi"><small id="k2label">Materiais recebidos</small><strong id="k2">34</strong><span>Indicador demonstrativo</span></div><div class="kpi"><small id="k3label">Triagem concluída</small><strong id="k3">71%</strong><span>Indicador demonstrativo</span></div><div class="kpi"><small id="k4label">Rastreabilidade</small><strong id="k4">96%</strong><span>Indicador demonstrativo</span></div></div>
-<button class="action" id="operation">▶ Iniciar operação de logística reversa</button><button class="secondary" id="back">← Voltar um nível / visão geral</button>
-<div class="sectiontitle">O que acontece neste ambiente</div><div class="info"><b id="taskTitle">Fluxo integrado</b><p id="task">Acompanhe a operação e veja como uma ação em cada setor afeta o restante da empresa.</p></div>
-<div class="info"><b>Conexão com as outras áreas</b><p id="connection">Gestão define prioridades; Administração organiza recursos e registros; Logística executa a operação física. Os resultados voltam para a Gestão.</p></div>
-<div class="notice">Protótipo acadêmico. Os indicadores são ilustrativos; não há conexão com GPS, ERP ou dados reais da empresa.</div>
-</aside>
-</main><footer>Gêmeo digital acadêmico · Integração entre Gestão, Administração e Operação Logística · Logística reversa: coleta, retorno, inspeção, reuso, reciclagem e destinação adequada.</footer>
-<script>
-const details={
-gestao:{title:"Gestão estratégica",desc:"Você entrou na sala de reuniões. Aqui a equipe analisa resultados, define prioridades e decide o que precisa mudar na operação.",taskTitle:"Sala de reuniões · painel de decisão",task:"A equipe acompanha volume de devoluções, custo por coleta, prazo de retorno, taxa de reaproveitamento e pendências. Ao identificar atraso, define prioridade e direciona recursos.",connection:"A Administração apresenta custos, orçamento e documentos. A Logística apresenta capacidade, rotas e status. A Gestão decide a prioridade e acompanha o impacto depois da execução.",k:["Decisões pendentes","Metas acompanhadas","Plano executado","Nível de serviço"],v:["03","12","78%","94%"],focus:[410,115,180,150]},
-administracao:{title:"Administração · Financeiro e controle",desc:"Você entrou no prédio administrativo. Explore o financeiro, compras e registros que dão suporte à operação.",taskTitle:"Financeiro · custos e recursos",task:"A equipe registra custos de transporte, despesas de triagem, notas e comprovantes, pagamentos de fornecedores e orçamento disponível. A solicitação de coleta vira registro e pode ser acompanhada até a destinação.",connection:"A Gestão define limites e prioridades. A Logística envia quantidades, comprovantes e ocorrências. A Administração consolida custos e devolve informações para decisão.",k:["Solicitações registradas","Custo por coleta","Documentos conferidos","Orçamento usado"],v:["34","R$ 82","97%","64%"],focus:[180,170,230,180]},
-logistica:{title:"Operação logística",desc:"Você entrou no galpão. Veja recebimento, separação, expedição e o fluxo físico dos materiais devolvidos.",taskTitle:"Chão de operação · recebimento e expedição",task:"O operador confere a solicitação, organiza a coleta, recebe o material, registra a quantidade, encaminha à triagem e move os itens classificados para estoque, reuso, reciclagem ou destinação adequada.",connection:"A Logística recebe prioridades da Gestão, confirma custos e registros com a Administração e envia resultados para atualizar os indicadores.",k:["Coletas em rota","Volumes recebidos","Triagem concluída","Rotas no prazo"],v:["04","34","71%","92%"],focus:[305,245,390,300]},
-transporte:{title:"Transporte · percurso do material",desc:"Acompanhe o caminhão saindo do centro, indo ao cliente, recolhendo a devolução e retornando à empresa.",taskTitle:"Rota de coleta e retorno",task:"O veículo segue a rota de coleta, confirma o recebimento no cliente e retorna ao centro. Na chegada, o material é entregue para conferência e triagem. A animação é demonstrativa, sem GPS real.",connection:"O status da viagem alimenta a operação logística, o comprovante segue para Administração e o prazo de retorno atualiza os indicadores da Gestão.",k:["Veículos em rota","Coletas concluídas","Retornos confirmados","Prazo de retorno"],v:["02","08","07","1,4 dia"],focus:[100,320,280,170]},
-triagem:{title:"Triagem reversa · inspeção",desc:"Entre na área onde os materiais devolvidos são conferidos e classificados.",taskTitle:"Inspecionar · classificar · encaminhar",task:"Após a conferência, os materiais são separados por condição: reuso direto, reparo, reciclagem ou destinação adequada. A classificação define a próxima movimentação e evita que tudo seja tratado como descarte.",connection:"A Logística movimenta os itens; a Administração registra quantidade e custos; a Gestão acompanha taxa de recuperação e descarte.",k:["Lotes aguardando","Itens inspecionados","Recuperação","Destinação registrada"],v:["06","34","71%","96%"],focus:[615,245,160,145]},
-estoque:{title:"Estoque reverso · destinação",desc:"Veja como o material classificado permanece rastreado até ser reutilizado, reciclado ou encaminhado ao destino adequado.",taskTitle:"Saldo, condição e destino",task:"Cada item recebe categoria, quantidade, condição e destino. O estoque reverso evita perdas, permite priorizar materiais reaproveitáveis e registra o encerramento do ciclo.",connection:"A Triagem atualiza a condição do item. A Administração mantém os registros e custos. A Gestão usa os resultados para avaliar recuperação e impacto.",k:["Itens em estoque","Prontos para reuso","Para reciclagem","Destinação concluída"],v:["34","12","17","96%"],focus:[720,340,170,140]},
-cliente:{title:"Cliente · ponto de coleta",desc:"O fluxo começa quando o cliente solicita a devolução e disponibiliza os materiais para recolhimento.",taskTitle:"Solicitação e coleta",task:"A solicitação é registrada com tipo e quantidade do material. A coleta é priorizada, o veículo confirma o recolhimento e os dados acompanham a carga até o centro.",connection:"A Administração registra a solicitação, a Gestão define prioridade e a Logística planeja a rota e confirma o retorno.",k:["Solicitações abertas","Coletas agendadas","Coletas confirmadas","Comprovantes"],v:["08","05","03","96%"],focus:[105,320,160,145]}
+:root{--bg:#071923;--panel:#102a36;--line:#244653;--text:#eaf5f7;--muted:#9bb3bc;--teal:#39d4c2;--orange:#ff9d43;--blue:#64b5f6}
+*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:var(--bg);font-family:Inter,system-ui,-apple-system,Segoe UI,sans-serif;color:var(--text)}
+#app{height:100dvh;display:grid;grid-template-rows:auto 1fr;position:relative;background:radial-gradient(ellipse at 50% 0%,#173b49 0,#071923 55%)}
+header{z-index:5;display:flex;align-items:center;justify-content:space-between;gap:14px;padding:12px 18px;border-bottom:1px solid #274652;background:#091d27ee;backdrop-filter:blur(16px)}
+.brand{display:flex;align-items:center;gap:11px}.logo{width:38px;height:38px;border-radius:12px;background:linear-gradient(135deg,#39d4c2,#187d83);display:grid;place-items:center;color:#06252a;font-size:20px;font-weight:900;box-shadow:0 0 24px #39d4c233}
+h1{font-size:15px;margin:0;letter-spacing:.04em}.sub{font-size:10px;color:var(--muted);margin-top:3px;letter-spacing:.13em;text-transform:uppercase}
+.headerRight{display:flex;align-items:center;gap:8px}.live{font-size:11px;color:#8ee7d7;display:flex;gap:6px;align-items:center}.dot{width:7px;height:7px;background:#39d4c2;border-radius:50%;box-shadow:0 0 10px #39d4c2}
+button{font:inherit;cursor:pointer;color:inherit;border:1px solid var(--line);background:#15323e;border-radius:10px;padding:9px 12px;font-size:12px;transition:.2s}button:hover{border-color:var(--teal);background:#1b414d}button.primary{background:var(--teal);color:#06282c;border-color:var(--teal);font-weight:800}
+main{min-height:0;display:grid;grid-template-columns:minmax(0,1fr) 320px;gap:12px;padding:12px}
+#viewport{position:relative;min-height:0;overflow:hidden;border:1px solid #244653;border-radius:18px;background:linear-gradient(150deg,#132f3c,#0a1b24 70%);box-shadow:0 20px 70px #0004}
+#scene{position:absolute;inset:0;width:100%;height:100%;display:block;touch-action:none;outline:none}
+.hudTop{position:absolute;left:14px;right:14px;top:13px;display:flex;justify-content:space-between;align-items:flex-start;gap:8px;pointer-events:none}.hudTop>*{pointer-events:auto}
+.badge{border:1px solid #31535f;background:#0a202bd9;backdrop-filter:blur(12px);border-radius:10px;padding:9px 11px;font-size:11px;color:#d9e9ed}.badge strong{color:var(--teal)}
+.viewControls{display:flex;gap:5px}.viewControls button{padding:8px 10px;background:#0a202bd9}
+.legend{position:absolute;bottom:13px;left:14px;display:flex;gap:7px;flex-wrap:wrap;max-width:70%;pointer-events:none}.legend span{font-size:10px;padding:6px 8px;background:#0a202bd9;border:1px solid #31535f;border-radius:7px;color:#c4d7dc}.sw{display:inline-block;width:7px;height:7px;border-radius:2px;margin-right:5px}
+.hint{position:absolute;bottom:14px;right:14px;color:#b8ccd1;background:#0a202bd9;border:1px solid #31535f;border-radius:9px;padding:8px 10px;font-size:10px;max-width:190px;text-align:center}
+#panel{min-height:0;overflow:auto;border:1px solid #244653;border-radius:18px;background:linear-gradient(160deg,#102b37,#0b202a);padding:16px;display:flex;flex-direction:column;gap:13px}
+.eyebrow{font-size:10px;text-transform:uppercase;letter-spacing:.16em;color:var(--teal);font-weight:800}.title{font-size:21px;font-weight:800;line-height:1.15;margin:5px 0}.desc{font-size:12px;line-height:1.55;color:#a9c0c8;margin:0}
+.metrics{display:grid;grid-template-columns:1fr 1fr;gap:8px}.metric{border:1px solid #244653;border-radius:12px;padding:11px;background:#0a202a}.metric label{font-size:10px;color:var(--muted);display:block;margin-bottom:7px}.metric strong{font-size:21px;letter-spacing:-.04em}.metric small{display:block;font-size:10px;color:#89aaaF;margin-top:3px}
+.section{border-top:1px solid #25434e;padding-top:12px}.section h3{font-size:11px;text-transform:uppercase;letter-spacing:.12em;color:#a8c4cc;margin:0 0 10px}
+.sectors{display:grid;grid-template-columns:1fr 1fr;gap:7px}.sectorBtn{text-align:left;min-height:42px;font-weight:700;font-size:11px;display:flex;align-items:center;gap:7px}.sectorBtn .ico{width:25px;height:25px;display:grid;place-items:center;border-radius:7px;background:#234653;color:var(--teal);font-size:13px}.sectorBtn.active{border-color:var(--teal);background:#17434b;box-shadow:inset 3px 0 var(--teal)}
+.flow{display:flex;flex-direction:column;gap:7px}.flowItem{display:flex;gap:9px;align-items:flex-start;color:#a9c0c8;font-size:11px;line-height:1.4}.num{width:22px;height:22px;flex:0 0 22px;border-radius:7px;background:#183945;color:#7ee5d6;display:grid;place-items:center;font-weight:800;font-size:10px}.flowItem.active .num{background:var(--orange);color:#301803}.flowItem.active{color:#fff}
+.statusline{font-size:10px;color:#91abb4;display:flex;align-items:center;justify-content:space-between;gap:8px}.bar{height:5px;background:#203b45;border-radius:99px;overflow:hidden;margin-top:8px}.bar span{height:100%;display:block;width:18%;background:linear-gradient(90deg,#39d4c2,#ffb35f);transition:width .5s}
+.footerNote{font-size:10px;line-height:1.45;color:#7897a2;margin-top:auto}
+#toast{position:absolute;left:50%;top:72px;transform:translate(-50%,-8px);opacity:0;pointer-events:none;background:#153844;border:1px solid #3a6c78;border-radius:10px;padding:10px 14px;font-size:12px;transition:.25s;z-index:4;white-space:normal;text-align:center;max-width:90%}#toast.show{opacity:1;transform:translate(-50%,0)}
+@media(max-width:800px){header{padding:10px 12px}.sub{display:none}main{grid-template-columns:1fr;grid-template-rows:minmax(290px,48vh) minmax(0,1fr);padding:8px;gap:8px}#panel{padding:13px;gap:10px;border-radius:14px}.title{font-size:18px}.metrics{grid-template-columns:repeat(4,minmax(0,1fr))}.metric{padding:8px}.metric strong{font-size:16px}.metric label{font-size:9px}.metric small{font-size:9px}.sectors{grid-template-columns:repeat(3,minmax(0,1fr))}.sectorBtn{padding:7px;min-height:38px;font-size:10px}.sectorBtn .ico{width:21px;height:21px;flex-shrink:0}.footerNote{margin-top:0}.legend{max-width:100%;bottom:10px}.hint{display:none}.viewControls button{padding:7px;font-size:10px}.badge{font-size:10px;padding:7px 8px}}
+@media(max-width:390px){.metrics{grid-template-columns:1fr 1fr}.sectorBtn{font-size:9px}.sectors{grid-template-columns:1fr 1fr}.brand h1{font-size:13px}}
+</style></head>
+<body><div id="app">
+<header><div class="brand"><div class="logo">↻</div><div><h1>CENTRO INTEGRADO · LOGÍSTICA REVERSA</h1><div class="sub">Gêmeo digital operacional · Projeto acadêmico</div></div></div><div class="headerRight"><span class="live"><i class="dot"></i> SIMULAÇÃO ATIVA</span><button id="resetTop">Visão geral</button></div></header>
+<main><section id="viewport"><canvas id="scene" aria-label="Maquete tridimensional interativa"></canvas>
+<div class="hudTop"><div class="badge"><strong>OPERAÇÃO 01</strong><br>Retorno · triagem · destinação</div><div class="viewControls"><button id="orbitBtn">⟳ Órbita</button><button id="labelsBtn">Etiquetas: ON</button></div></div>
+<div class="legend"><span><i class="sw" style="background:#39d4c2"></i>Reutilização</span><span><i class="sw" style="background:#ffad59"></i>Reparo</span><span><i class="sw" style="background:#67b5f5"></i>Reciclagem</span><span><i class="sw" style="background:#a7aeb5"></i>Descarte controlado</span></div><div class="hint">Arraste para girar · pinça/roda para aproximar · toque em um setor</div><div id="toast"></div></section>
+<aside id="panel"><div><div class="eyebrow" id="eyebrow">VISÃO INTEGRADA</div><div class="title" id="panelTitle">A operação conectada</div><p class="desc" id="panelDesc">Explore a instalação em 3D. Selecione um setor para aproximar a câmera e entender suas responsabilidades e conexões.</p></div>
+<div class="metrics"><div class="metric"><label>Etapa do fluxo</label><strong id="mStep">01/05</strong><small>processo demonstrativo</small></div><div class="metric"><label>Materiais triados</label><strong id="mItems">128</strong><small>unidades ilustrativas</small></div><div class="metric"><label>Recuperação</label><strong id="mRecovery">72%</strong><small>meta de simulação</small></div><div class="metric"><label>Rastreabilidade</label><strong id="mTrace">100%</strong><small>registros do exemplo</small></div></div>
+<div class="section"><h3>Explorar áreas</h3><div class="sectors">
+<button class="sectorBtn" data-sector="gestao"><span class="ico">◈</span>Gestão</button><button class="sectorBtn" data-sector="administracao"><span class="ico">▤</span>Administração</button><button class="sectorBtn" data-sector="logistica"><span class="ico">⇄</span>Operação logística</button><button class="sectorBtn" data-sector="frota"><span class="ico">▰</span>Frota e transporte</button><button class="sectorBtn" data-sector="armazem"><span class="ico">▦</span>Armazém</button><button class="sectorBtn" data-sector="triagem"><span class="ico">♻</span>Triagem reversa</button></div></div>
+<div class="section"><h3 id="flowHeading">Fluxo de logística reversa</h3><div class="flow" id="flow"></div><div class="bar"><span id="progress"></span></div><div class="statusline" style="margin-top:8px"><span id="flowStatus">Pronto para iniciar</span><span id="flowPct">0%</span></div></div>
+<div style="display:flex;gap:8px"><button class="primary" id="startBtn" style="flex:1">▶ Iniciar operação</button><button id="nextBtn">Próxima etapa ↗</button></div>
+<div class="footerNote">Modelo conceitual para fins acadêmicos. Indicadores e quantidades são demonstrativos, não representam dados operacionais reais.</div></aside></main></div>
+<script type="module">
+import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js';
+import { OrbitControls } from 'https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/controls/OrbitControls.js';
+const canvas=document.querySelector('#scene'), viewport=document.querySelector('#viewport');
+const scene=new THREE.Scene(); scene.background=new THREE.Color('#102b37'); scene.fog=new THREE.Fog('#102b37',65,135);
+const camera=new THREE.PerspectiveCamera(42,1,.1,250); camera.position.set(39,34,43);
+const renderer=new THREE.WebGLRenderer({canvas,antialias:true,alpha:false});renderer.setPixelRatio(Math.min(devicePixelRatio,2));renderer.shadowMap.enabled=true;renderer.shadowMap.type=THREE.PCFSoftShadowMap;renderer.outputColorSpace=THREE.SRGBColorSpace;renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=1.15;
+const controls=new OrbitControls(camera,renderer.domElement);controls.enableDamping=true;controls.dampingFactor=.06;controls.maxPolarAngle=Math.PI*.48;controls.minDistance=10;controls.maxDistance=100;controls.target.set(0,0,0);
+scene.add(new THREE.HemisphereLight(0xc9e8ff,0x35433b,2.1));
+const sun=new THREE.DirectionalLight(0xfff0d9,3.2);sun.position.set(-25,40,22);sun.castShadow=true;sun.shadow.mapSize.set(2048,2048);sun.shadow.camera.left=-55;sun.shadow.camera.right=55;sun.shadow.camera.top=55;sun.shadow.camera.bottom=-55;scene.add(sun);
+const mats={ground:mat('#a8b6b7'),asphalt:mat('#26343b'),concrete:mat('#c5ccca'),wall:mat('#d5dedb'),roof:mat('#234854'),steel:mat('#506772'),dark:mat('#182a31'),teal:mat('#20b9ac'),orange:mat('#ff9d43'),blue:mat('#4c9fe8'),grey:mat('#909fa5'),box:mat('#c28a50'),pallet:mat('#8b6845'),glass:mat('#4e8292'),white:mat('#edf2ed'),green:mat('#428d69'),red:mat('#c75b4d')};
+function mat(c,rough=.8){return new THREE.MeshStandardMaterial({color:c,roughness:rough})}
+function box(parent,x,y,z,w,h,d,material,opts={}){const o=new THREE.Mesh(new THREE.BoxGeometry(w,h,d),material);o.position.set(x,y,z);o.castShadow=opts.cast!==false;o.receiveShadow=true;parent.add(o);return o}
+function cyl(parent,x,y,z,r,h,material,rot=0){const o=new THREE.Mesh(new THREE.CylinderGeometry(r,r,h,16),material);o.position.set(x,y,z);o.rotation.z=rot;o.castShadow=true;parent.add(o);return o}
+function line(parent,pts,color='#39d4c2',radius=.055){const curve=new THREE.CatmullRomCurve3(pts.map(p=>new THREE.Vector3(...p)));const o=new THREE.Mesh(new THREE.TubeGeometry(curve,50,radius,8,false),mat(color,.45));parent.add(o);return o}
+function label(text,x,y,z,color='#eaf5f7',size=1.0){const c=document.createElement('canvas'),ctx=c.getContext('2d');ctx.font='700 40px Arial';const w=Math.max(220,ctx.measureText(text).width+36);c.width=w;c.height=68;ctx.font='700 40px Arial';ctx.fillStyle='#071923dd';ctx.beginPath();ctx.roundRect(0,0,w,68,12);ctx.fill();ctx.strokeStyle=color;ctx.lineWidth=3;ctx.stroke();ctx.fillStyle=color;ctx.fillText(text,18,47);const tex=new THREE.CanvasTexture(c);tex.colorSpace=THREE.SRGBColorSpace;const m=new THREE.Sprite(new THREE.SpriteMaterial({map:tex,transparent:true,depthTest:false}));m.position.set(x,y,z);m.scale.set(size*w/68,size,1);m.userData.isLabel=true;scene.add(m);return m}
+const floor=box(scene,0,-.5,0,100,1,82,mats.ground,{cast:false});floor.name='floor';
+box(scene,0,-.01,0,96,.08,78,mats.concrete,{cast:false});
+// asphalt access roads
+box(scene,0,.015,29,90,.08,9,mats.asphalt,{cast:false});box(scene,-37,.02,8,8,.08,50,mats.asphalt,{cast:false});box(scene,37,.02,8,8,.08,50,mats.asphalt,{cast:false});
+for(let x=-42;x<=42;x+=5)box(scene,x,.07,29,.12,.025,4.2,mat('#d7c98a'),{cast:false});
+for(let z=-15;z<=22;z+=5)box(scene,-37,.07,z,4,.025,.12,mat('#d7c98a'),{cast:false});
+const clickable=[],sectorGroups={};let labelsOn=true;
+function zone(id,title,x,z,w,d,color){const g=new THREE.Group();g.position.set(x,0,z);g.userData.sector=id;scene.add(g);sectorGroups[id]=g;const plate=box(g,0,.09,0,w,.12,d,mat(color,.9),{cast:false});plate.material.transparent=true;plate.material.opacity=.17;plate.userData.sector=id;clickable.push(plate);const outline=new THREE.LineSegments(new THREE.EdgesGeometry(new THREE.BoxGeometry(w,.18,d)),new THREE.LineBasicMaterial({color,transparent:true,opacity:.75}));outline.position.y=.16;g.add(outline);return g}
+function warehouse(){const g=zone('armazem','Armazém',-10,-5,34,25,'#39d4c2');box(g,0,5,0,32,10,23,mats.wall); // building volume
+// open-front facade and roof slabs make a cutaway-style interior
+box(g,0,10.2,0,33,.45,24,mats.roof);box(g,0,4.8,-11.7,33,9.5,.5,mats.roof);box(g,-16,4.8,0,.5,9.5,24,mats.roof);box(g,16,4.8,0,.5,9.5,24,mats.roof);
+for(let x=-13;x<=13;x+=6){box(g,x,5,11.1,.35,10,.35,mats.steel);box(g,x,5,-11.1,.35,10,.35,mats.steel)}
+// racks
+for(let row=0;row<3;row++){let z=-7+row*6;for(let x=-12;x<=11;x+=5){for(let y=1.5;y<=7.5;y+=2.5){box(g,x,y,z,4.3,.18,.55,mats.orange);for(let bx=-1.3;bx<=1.4;bx+=1.35)box(g,x+bx,y+.75,z,.95,1.25,.85,row===1?mats.blue:mats.box)}box(g,x-2.1,4.8,z,.18,8,.65,mats.steel);box(g,x+2.1,4.8,z,.18,8,.65,mats.steel)}}
+for(let i=0;i<7;i++){let x=-12+i*4;box(g,x,.6,8,2.1,.35,1.5,mats.pallet);for(let j=0;j<2;j++)box(g,x-.48,.95,8+j*.02,.85,.65,.75,mats.box)}
+// conveyor
+for(let x=-3;x<12;x+=1.2){box(g,x,1.45,2.5,1,.25,1.15,mats.dark);cyl(g,x,1.6,1.85,.22,.85,mats.steel,Math.PI/2)}
+// door opening details
+for(let x=-13;x<=13;x+=6){box(g,x,2.3,11.5,3.5,4.4,.15,mats.dark);box(g,x,4.35,11.62,3.2,.15,.15,mats.orange)}
+label('ARMAZÉM · RECEBIMENTO',-10,13,-5,'#67e5d5',1.3);return g}
+function office(){const g=zone('administracao','Administração',18,-14,19,17,'#64b5f6');box(g,0,2.5,0,18,5,16,mats.wall);box(g,0,5.15,0,18,.3,16,mats.roof);box(g,0,2.5,7.9,18,4.6,.25,mats.roof);box(g,-8.9,2.5,0,.25,5,16,mats.roof);
+for(let i=0;i<3;i++){box(g,-5+i*5,1.25,-3,3, .18,1.7,mats.steel);box(g,-5+i*5,2,-3,.16,1.2,.16,mats.steel);box(g,-5+i*5,1.8,-3,.8,.55,.1,mats.glass);box(g,-5+i*5, .6,-4.3,.8,.9,.8,mats.dark)}
+box(g,1,.8,3,6,.25,2.2,mats.box);for(let i=0;i<6;i++){let x=-1.5+(i%3)*2.5,z=2.1+Math.floor(i/3)*1.8;cyl(g,x,.6,z,.35,.8,mats.steel)}label('ADMINISTRAÇÃO · FINANÇAS',18,8,-14,'#8ecbff',1.15);return g}
+function management(){const g=zone('gestao','Gestão',18,5,19,16,'#ffad59');box(g,0,2.5,0,18,5,15,mats.wall);box(g,0,5.1,0,18,.25,15,mats.roof);box(g,0,2.5,7.4,18,4.7,.25,mats.roof);box(g,-8.8,2.5,0,.25,5,15,mats.roof);box(g,0,.85,0,7,.3,3.5,mats.dark);for(let i=0;i<6;i++){let x=-3+(i%3)*3,z=-2+Math.floor(i/3)*4;cyl(g,x,.6,z,.38,.7,mats.orange)}box(g,-5,2,-4,3,1.5,.15,mats.glass);label('GESTÃO · CENTRO DE CONTROLE',18,8,5,'#ffc27f',1.1);return g}
+function triage(){const g=zone('triagem','Triagem reversa',-8,17,28,9,'#ff9d43');for(let i=0;i<3;i++){const x=-16+i*8;box(g,x,1,0,6,1.5,5,i===0?mats.teal:i===1?mats.orange:mats.blue);box(g,x,1.9,0,6,.25,5,mats.steel);for(let j=0;j<3;j++)box(g,x-1.5+j*1.5,2.35,0,1.2,.7,1.3,i===0?mats.green:i===1?mats.orange:mats.blue)}label('TRIAGEM · DESTINAÇÃO',-8,5,17,'#ffc27f',1.15);return g}
+function fleet(){const g=zone('frota','Frota e transporte',-29,3,13,22,'#9bb9c4');for(let i=0;i<3;i++){const z=-5+i*7;makeTruck(g,-1,0,z,i===0?mats.teal:mats.blue)}label('FROTA · DOCA',-29,6,3,'#b9d7df',1.05);return g}
+function makeTruck(parent,x,y,z,color){const g=new THREE.Group();g.position.set(x,y,z);parent.add(g);box(g,0,1.1,0,3.3,1.7,5.4,mat('#e4e9e7'));box(g,0,1.45,3.1,3.2,2.1,1.5,color);box(g,0,1.65,3.88,2.5,.7,.08,mats.glass);for(const wx of [-1.25,1.25])for(const wz of [-1.7,1.8,3.2]){cyl(g,wx,.45,wz,.48,.32,mats.dark,Math.PI/2);cyl(g,wx,.45,wz+.02,.22,.34,mats.steel,Math.PI/2)}return g}
+const wh=warehouse(),of=office(),mg=management(),tr=triage(),fl=fleet();
+function forklift(parent,x,z){const g=new THREE.Group();g.position.set(x,0,z);parent.add(g);box(g,0,.8,0,1.6,.7,2,mats.orange);box(g,0,1.55,-.25,1.1,1.1,.12,mats.steel);box(g,0,1.4,.8,.12,1.7,.12,mats.dark);box(g,.45,1.4,.8,.12,1.7,.12,mats.dark);box(g,.25,.55,1.35,1.2,.12,.65,mats.steel);for(let wx of [-.65,.65])for(let wz of [-.55,.65])cyl(g,wx,.35,wz,.28,.22,mats.dark,Math.PI/2);return g}
+forklift(wh,9,4);forklift(wh,-7,5);
+const truck=makeTruck(scene,0,0,29,mats.teal);truck.userData.moving=true;
+for(let i=0;i<12;i++){const x=-34+(i%6)*13,z=36+Math.floor(i/6)*2;box(scene,x,.3,z,1.3,.5,1.3,i%3===0?mats.orange:mats.green)}
+// Connecting information/physical routes are luminous raised paths.
+line(scene,[[-37, .3,13],[-37,.3,29],[-20,.3,29],[-10,.3,18],[-10,.3,9]],'#39d4c2',.09);
+line(scene,[[-8,.3,7],[-8,.3,13],[-8,.3,17]],'#ffad59',.09);
+line(scene,[[3,.3,17],[10,.3,17],[18,.3,5]],'#64b5f6',.08);
+line(scene,[[18,.3,-5],[18,.3,-14]],'#64b5f6',.07);
+const sectorData={
+overview:{eyebrow:'VISÃO INTEGRADA',title:'A operação conectada',desc:'Explore a instalação em 3D. Selecione um setor para aproximar a câmera e entender suas responsabilidades e conexões.'},
+gestao:{eyebrow:'SETOR 01 · DECISÃO',title:'Gestão',desc:'Define prioridades, metas e padrões de serviço. Consolida indicadores de logística e custos administrativos para decidir ações corretivas.',items:['Acompanha nível de recuperação e prazo de retorno','Prioriza recursos e trata desvios','Recebe indicadores da Administração e da Logística'],pos:[25,18,13],target:[18,0,5]},
+administracao:{eyebrow:'SETOR 02 · CONTROLE',title:'Administração',desc:'Registra documentos, custos, compras, pagamentos e resultados. Transforma os dados da operação em informação financeira rastreável.',items:['Registra custo por rota e por material','Controla notas, compras e orçamento','Entrega relatórios e desvios para a Gestão'],pos:[26,17,-7],target:[18,0,-14]},
+logistica:{eyebrow:'SETOR 03 · EXECUÇÃO',title:'Operação logística',desc:'Coordena recebimento, conferência, movimentação interna, triagem e expedição dos materiais que retornam à cadeia.',items:['Confere quantidade e condição do retorno','Encaminha materiais conforme a triagem','Atualiza estoque e registra cada movimentação'],pos:[-1,18,24],target:[-8,0,17]},
+frota:{eyebrow:'TRANSPORTE · ROTEIRIZAÇÃO',title:'Frota e transporte',desc:'Organiza veículos, rotas, janelas de coleta e retorno. A viagem concluída alimenta o registro de custo e a análise de desempenho.',items:['Planeja coleta e retorno ao centro','Registra quilometragem e ocorrência','Comunica comprovantes e custos à Administração'],pos:[-38,15,15],target:[-29,0,3]},
+armazem:{eyebrow:'ESTOQUE · MOVIMENTAÇÃO',title:'Armazém',desc:'Recebe, identifica e guarda os materiais retornados. A localização e a movimentação precisam permanecer rastreáveis.',items:['Recebe e etiqueta o material','Separa por categoria e condição','Atualiza saldo e libera para triagem'],pos:[-10,19,15],target:[-10,0,-5]},
+triagem:{eyebrow:'LOGÍSTICA REVERSA · DESTINAÇÃO',title:'Triagem reversa',desc:'A inspeção define o destino de cada item: reutilização direta, reparo, reciclagem ou descarte controlado.',items:['Inspeção e classificação técnica','Registro de decisão e responsável','Destinação correta com comprovante'],pos:[-8,15,31],target:[-8,0,17]}
 };
-const svg=document.getElementById('campus'),scene=document.getElementById('scene'),truck=document.getElementById('truck');
-let current='overview',moving=false;
-function focusView(key){current=key;let d=details[key];if(!d){overview();return}
-document.getElementById('viewTag').textContent='AMBIENTE: '+d.title.toUpperCase();document.getElementById('eyebrow').textContent='AMBIENTE OPERACIONAL';document.getElementById('title').textContent=d.title;document.getElementById('desc').textContent=d.desc;document.getElementById('taskTitle').textContent=d.taskTitle;document.getElementById('task').textContent=d.task;document.getElementById('connection').textContent=d.connection;
-['k1label','k2label','k3label','k4label'].forEach((id,i)=>document.getElementById(id).textContent=d.k[i]);['k1','k2','k3','k4'].forEach((id,i)=>document.getElementById(id).textContent=d.v[i]);
-document.querySelectorAll('[data-open]').forEach(b=>b.classList.toggle('active',b.dataset.open===key));
-let [x,y,w,h]=d.focus;const vw=1000,vh=760;let scale=Math.min(vw/w,vh/h,3.2);let tx=(vw/2-x-w/2)*scale,ty=(vh/2-y-h/2)*scale;scene.style.transform='translate('+tx+'px,'+ty+'px) scale('+scale+')';document.getElementById('operation').textContent=key==='logistica'||key==='transporte'?'▶ Acompanhar percurso do material':'↗ Ver impacto desta área na operação';
-}
-function overview(){current='overview';scene.style.transform='translate(0px,0px) scale(1)';document.getElementById('viewTag').textContent='VISÃO GERAL DA EMPRESA';document.getElementById('eyebrow').textContent='PAINEL OPERACIONAL DINÂMICO';document.getElementById('title').textContent='Uma empresa. Três áreas conectadas.';document.getElementById('desc').textContent='Selecione Gestão, Administração ou Logística na maquete. A câmera se aproxima do ambiente e mostra o trabalho daquela equipe.';document.getElementById('taskTitle').textContent='Fluxo integrado';document.getElementById('task').textContent='Acompanhe a operação e veja como uma ação em cada setor afeta o restante da empresa.';document.getElementById('connection').textContent='Gestão define prioridades; Administração organiza recursos e registros; Logística executa a operação física. Os resultados voltam para a Gestão.';['Coletas pendentes','Materiais recebidos','Triagem concluída','Rastreabilidade'].forEach((v,i)=>document.getElementById('k'+(i+1)+'label').textContent=v);['08','34','71%','96%'].forEach((v,i)=>document.getElementById('k'+(i+1)).textContent=v);document.querySelectorAll('[data-open]').forEach(b=>b.classList.remove('active'));document.getElementById('operation').textContent='▶ Iniciar operação de logística reversa'}
-document.querySelectorAll('[data-focus]').forEach(el=>{el.addEventListener('click',()=>focusView(el.dataset.focus));el.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();focusView(el.dataset.focus)}})});
-document.querySelectorAll('[data-open]').forEach(b=>b.addEventListener('click',()=>focusView(b.dataset.open)));
-document.getElementById('overviewBtn').addEventListener('click',overview);document.getElementById('back').addEventListener('click',overview);
-truck.addEventListener('click',()=>focusView('transporte'));truck.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();focusView('transporte')}});
-document.getElementById('operation').addEventListener('click',()=>{if(moving)return;focusView('transporte');moving=true;const path=[{x:220,y:420},{x:150,y:390},{x:350,y:415},{x:500,y:430},{x:660,y:335},{x:760,y:385},{x:650,y:420},{x:500,y:430}];let i=0;const go=()=>{if(i>=path.length){moving=false;document.getElementById('taskTitle').textContent='Percurso concluído · material entregue';document.getElementById('task').textContent='O caminhão retornou ao centro. O material segue para conferência e triagem; os registros atualizam Administração e os indicadores retornam à Gestão.';document.getElementById('k2').textContent='35';document.getElementById('k3').textContent='74%';return}let p=path[i++];truck.setAttribute('transform','translate('+p.x+' '+p.y+')');setTimeout(go,850)};go()});
-</script>
-</body></html>
+const stages=[['Coleta de retorno','Veículo coleta os materiais no cliente.'],['Recebimento','Carga é descarregada e identificada no centro.'],['Inspeção e triagem','Equipe registra condição e categoria de cada item.'],['Destinação','Itens seguem para reuso, reparo, reciclagem ou descarte.'],['Fechamento e indicadores','Estoque, custos e resultados alimentam Administração e Gestão.']];
+let stage=-1,running=false,animStart=0,truckStart=new THREE.Vector3(0,0,29),truckEnd=new THREE.Vector3(-29,0,3);
+function toast(s){const el=document.querySelector('#toast');el.textContent=s;el.classList.add('show');setTimeout(()=>el.classList.remove('show'),2200)}
+function setSector(id){const d=sectorData[id]||sectorData.overview;document.querySelector('#eyebrow').textContent=d.eyebrow;document.querySelector('#panelTitle').textContent=d.title;document.querySelector('#panelDesc').textContent=d.desc;document.querySelectorAll('.sectorBtn').forEach(b=>b.classList.toggle('active',b.dataset.sector===id));document.querySelector('#flowHeading').textContent=id==='overview'?'Fluxo de logística reversa':'Responsabilidades do setor';const f=document.querySelector('#flow');f.innerHTML='';const items=d.items||stages.map(s=>s[0]+' — '+s[1]);items.forEach((s,i)=>{const e=document.createElement('div');e.className='flowItem'+(i===stage?' active':'');e.innerHTML='<span class="num">'+String(i+1).padStart(2,'0')+'</span><span>'+s+'</span>';f.appendChild(e)});if(id!=='overview'){const p=new THREE.Vector3(...d.pos),t=new THREE.Vector3(...d.target);animateCamera(p,t);toast('Setor selecionado: '+d.title)}else{animateCamera(new THREE.Vector3(39,34,43),new THREE.Vector3(0,0,0))}}
+let camAnim=null;function animateCamera(pos,target){camAnim={from:camera.position.clone(),to:pos,tf:controls.target.clone(),tt:target,start:performance.now(),dur:850}}
+document.querySelectorAll('.sectorBtn').forEach(b=>b.addEventListener('click',()=>setSector(b.dataset.sector)));
+document.querySelector('#resetTop').onclick=()=>setSector('overview');
+document.querySelector('#orbitBtn').onclick=()=>{controls.autoRotate=!controls.autoRotate;controls.autoRotateSpeed=.7;document.querySelector('#orbitBtn').textContent=controls.autoRotate?'⏸ Parar órbita':'⟳ Órbita'};
+document.querySelector('#labelsBtn').onclick=()=>{labelsOn=!labelsOn;scene.traverse(o=>{if(o.userData.isLabel)o.visible=labelsOn});document.querySelector('#labelsBtn').textContent='Etiquetas: '+(labelsOn?'ON':'OFF')};
+function updateStage(){const i=Math.max(0,stage);document.querySelector('#mStep').textContent=String(i+1).padStart(2,'0')+'/05';document.querySelector('#progress').style.width=((i+1)/5*100)+'%';document.querySelector('#flowPct').textContent=Math.round((i+1)/5*100)+'%';document.querySelector('#flowStatus').textContent=stage<0?'Pronto para iniciar':stages[i][0];document.querySelector('#mItems').textContent=[128,128,124,92,92][i];document.querySelector('#mRecovery').textContent=['72%','72%','69%','72%','72%'][i];document.querySelector('#flow').innerHTML='';stages.forEach((s,j)=>{const e=document.createElement('div');e.className='flowItem'+(j===stage?' active':'');e.innerHTML='<span class="num">'+String(j+1).padStart(2,'0')+'</span><span><b>'+s[0]+'</b><br>'+s[1]+'</span>';document.querySelector('#flow').appendChild(e)});document.querySelector('#flowHeading').textContent='Fluxo de logística reversa';document.querySelector('#flowStatus').textContent=stage<0?'Pronto para iniciar':stages[stage][0];document.querySelector('#startBtn').textContent=running?'Ⅱ Pausar operação':stage>=4?'↻ Reiniciar operação':'▶ '+(stage<0?'Iniciar operação':'Continuar operação')}
+function advance(){if(stage>=4){stage=-1;truck.position.copy(truckStart);updateStage();return}stage++;if(stage===0){truck.position.copy(truckStart);animateCamera(new THREE.Vector3(-37,13,39),new THREE.Vector3(-25,0,24));toast('Etapa 1: veículo inicia a coleta de retorno')}if(stage===1){animateCamera(new THREE.Vector3(-20,15,13),new THREE.Vector3(-10,0,-5));toast('Etapa 2: recebimento no armazém')}if(stage===2){animateCamera(new THREE.Vector3(-4,12,28),new THREE.Vector3(-8,0,17));toast('Etapa 3: inspeção e triagem')}if(stage===3){animateCamera(new THREE.Vector3(0,15,25),new THREE.Vector3(-8,0,17));toast('Etapa 4: materiais seguem à destinação')}if(stage===4){animateCamera(new THREE.Vector3(24,17,6),new THREE.Vector3(10,0,-3));toast('Etapa 5: dados consolidados para Administração e Gestão')}updateStage()}
+document.querySelector('#nextBtn').onclick=advance;document.querySelector('#startBtn').onclick=()=>{if(stage>=4){stage=-1;advance();running=true}else if(!running){running=true;if(stage<0)advance();document.querySelector('#startBtn').textContent='Ⅱ Pausar operação'}else{running=false;document.querySelector('#startBtn').textContent='▶ Continuar operação'}};
+const raycaster=new THREE.Raycaster(),pointer=new THREE.Vector2();let down=null;canvas.addEventListener('pointerdown',e=>{down={x:e.clientX,y:e.clientY}});
+canvas.addEventListener('pointerup',e=>{if(!down||Math.hypot(e.clientX-down.x,e.clientY-down.y)>7)return;const r=canvas.getBoundingClientRect();pointer.x=((e.clientX-r.left)/r.width)*2-1;pointer.y=-((e.clientY-r.top)/r.height)*2+1;raycaster.setFromCamera(pointer,camera);const hits=raycaster.intersectObjects(clickable,true);if(hits.length){let id=hits[0].object.userData.sector; if(id)setSector(id)}});
+function resize(){const w=viewport.clientWidth,h=viewport.clientHeight;if(!w||!h)return;renderer.setSize(w,h,false);camera.aspect=w/h;camera.updateProjectionMatrix()}new ResizeObserver(resize).observe(viewport);resize();
+const clock=new THREE.Clock();function render(now){requestAnimationFrame(render);const dt=clock.getDelta();controls.update();if(camAnim){const k=Math.min(1,(now-camAnim.start)/camAnim.dur),e=k*k*(3-2*k);camera.position.lerpVectors(camAnim.from,camAnim.to,e);controls.target.lerpVectors(camAnim.tf,camAnim.tt,e);if(k>=1)camAnim=null}if(running&&stage>=0&&stage<4){const t=(now-animStart)/1000;truck.position.x=truckStart.x+Math.sin(t*.45)*7;truck.position.z=29-Math.min(1,(t%12)/12)*24}renderer.render(scene,camera)}requestAnimationFrame(render);
+updateStage();
+</script></body></html>
