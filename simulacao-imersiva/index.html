@@ -192,7 +192,7 @@ function toggleCityTracking(){
  else{clearInterval(cityTimer);cityTimer=null;b.textContent="▶ Retomar movimentação"}
 }
 function centerCityMap(){if(!cityMap)return;const bounds=L.latLngBounds(cityFleet.flatMap(v=>[v.from,v.to]).concat([[-22.75,-43.36],[-23.02,-42.98]]));cityMap.fitBounds(bounds,{padding:[24,24]})}
-window.addEventListener("load",()=>{initCityTracking();});
+window.addEventListener("load",()=>{if(!document.getElementById("cityScene"))initCityTracking();});
 </script>
 
 <script type="module">
@@ -244,18 +244,18 @@ for(let x=-200;x<=160;x+=35){tree(x,-108,.8);tree(x,102,.75)}
 for(let x=-185;x<=150;x+=30){lamp(x,-40);lamp(x,25)}
 // route helpers and moving fleet; paths stay snapped to the asphalt grid
 const fleetData=[
-{id:"JSL-102",kind:"COLETA",color:"#19d6c4",path:[[-125,.9,-100],[-125,.9,-40],[-65,.9,-40],[-65,.9,25],[-150,.9,25],[-150,.9,90]]},
+{id:"JSL-102",kind:"COLETA",color:"#19d6c4",path:[[-125,.9,-100],[-125,.9,-40],[-65,.9,-40],[-65,.9,25],[-150,.9,25],[-125,.9,90]]},
 {id:"JSL-205",kind:"COLETA",color:"#19d6c4",path:[[0,.9,-100],[65,.9,-100],[65,.9,-40],[125,.9,-40],[125,.9,25],[65,.9,25]]},
 {id:"JSL-318",kind:"COLETA",color:"#19d6c4",path:[[-65,.9,90],[0,.9,90],[0,.9,25],[-65,.9,25],[-125,.9,-40]]},
 {id:"JSL-421",kind:"COLETA",color:"#19d6c4",path:[[125,.9,90],[125,.9,25],[65,.9,25],[65,.9,-40],[0,.9,-40]]},
-{id:"JSL-509",kind:"APOIO",color:"#ffb45e",path:[[-125,.9,-40],[-65,.9,-40],[0,.9,-40],[0,.9,25],[-65,.9,25],[-150,.9,90]]},
+{id:"JSL-509",kind:"APOIO",color:"#ffb45e",path:[[-125,.9,-40],[-65,.9,-40],[0,.9,-40],[0,.9,25],[-65,.9,25],[-125,.9,90]]},
 {id:"JSL-612",kind:"APOIO",color:"#ffb45e",path:[[65,.9,90],[125,.9,90],[125,.9,25],[65,.9,25],[0,.9,25],[-65,.9,90]]}
 ];
 const routeGroup=group(scene);const vehicles=[],clickTargets=[];
 function makeTruck(data,index){const g=group(scene,...data.path[0]);const body=box(g,0,1.3,0,4.4,2.0,8.2,M.cream);box(g,0,2.45,-.5,4.35,.2,7.8,M.white);box(g,0,1.65,2.6,4.2,2.5,2.7,index<4?M.teal:M.orange);box(g,0,2.65,2.65,4.25,.2,2.7,M.white);box(g,0,2.1,4.0,3.1,1.0,.1,M.glass);box(g,0,1.8,-4.16,3.2,1.2,.1,M.white);for(const x of [-2.1,2.1])for(const z of [-2.8,2.8]){const w=new THREE.Mesh(new THREE.CylinderGeometry(.78,.78,.45,16),M.road);w.rotation.z=Math.PI/2;w.position.set(x,.7,z);g.add(w)}const brand=labelSprite("JSL · ODS",0,5,0,index<4?"#72f0df":"#ffd29a");brand.scale.set(12,2.5,1);g.userData={fleet:data.id};g.traverse(o=>{if(o.isMesh)clickTargets.push(o)});return g}
 function drawRoutes(){fleetData.forEach((d,i)=>{const curve=new THREE.CatmullRomCurve3(d.path.map(p=>new THREE.Vector3(p[0],.38,p[2])));const mesh=new THREE.Mesh(new THREE.TubeGeometry(curve,90,.42,7,false),new THREE.MeshBasicMaterial({color:d.color,transparent:true,opacity:.68}));routeGroup.add(mesh);const halo=new THREE.Mesh(new THREE.TubeGeometry(curve,90,.9,7,false),new THREE.MeshBasicMaterial({color:d.color,transparent:true,opacity:.09}));routeGroup.add(halo)})}
 drawRoutes();fleetData.forEach((d,i)=>vehicles.push({data:d,mesh:makeTruck(d,i),curve:new THREE.CatmullRomCurve3(d.path.map(p=>new THREE.Vector3(p[0],0,p[2]))),progress:i*.147}));
-const collectionPoints=[[-125,-40],[-65,25],[65,-40],[125,25],[0,90],[-150,90]];
+const collectionPoints=[[-125,-40],[-65,25],[65,-40],[125,25],[0,90],[-125,90]];
 collectionPoints.forEach((p,i)=>{const g=group(scene,p[0],0,p[1]);const ring=new THREE.Mesh(new THREE.TorusGeometry(2.4,.32,8,28),new THREE.MeshBasicMaterial({color:"#f1d9a7"}));ring.rotation.x=Math.PI/2;ring.position.y=.5;g.add(ring);const pin=box(g,0,2.2,0,.9,3,.9,M.orange);pin.userData.collectionPoint=true;});
 const raycaster=new THREE.Raycaster(),pointer=new THREE.Vector2();let selected=null,playing=true,routesVisible=true;const info=document.getElementById("cityVehicleInfo");
 function selectVehicle(id){const v=vehicles.find(x=>x.data.id===id);if(!v)return;selected=id;info.innerHTML="<b>"+v.data.id+" · "+v.data.kind+"</b><span>Veículo demonstrativo · Rota urbana simulada · Status: em deslocamento. Equipe vinculada: "+(v.data.kind==="COLETA"?"Equipe de coleta":"Equipe de apoio")+".</span>";controls.target.copy(v.mesh.position);camera.position.set(v.mesh.position.x+48,48,v.mesh.position.z+58)}
