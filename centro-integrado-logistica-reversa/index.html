@@ -48,9 +48,63 @@ body.mobile-layout main .title{font-size:16px}
 body.mobile-layout .legend{left:7px;bottom:7px;gap:4px;max-width:96%}body.mobile-layout .legend span{font-size:8px;padding:4px}
 body.mobile-layout .viewControls button{font-size:9px;padding:6px}
 @media(max-height:700px){body.mobile-layout main{grid-template-rows:minmax(220px,39dvh) minmax(0,1fr)}body.mobile-layout #panel{gap:7px;padding:9px}}
+
+/* Foundry-inspired visual refinement — keeps the existing Three.js model and behavior */
+:root{--bg:#030712;--panel:rgba(10,16,26,.78);--line:rgba(0,242,254,.16);--text:#f3f7fb;--muted:#a6b5c7;--teal:#00d9df;--cyan:#00f2fe}
+body{background:#030712!important;color:#f3f7fb}
+#app{background:radial-gradient(ellipse at 72% 0%,#152a4a 0%,#081326 43%,#030712 100%)!important}
+header{background:rgba(4,10,22,.82)!important;border-bottom:1px solid rgba(0,242,254,.16)!important;backdrop-filter:blur(18px);padding:13px 18px}
+.logo{background:linear-gradient(135deg,#00f2fe,#087b9a)!important;color:#03121d!important;box-shadow:0 0 28px #00dce733!important}
+h1{letter-spacing:.07em}
+.sub{color:#9bb3c9!important}
+.live{color:#68ead5!important}
+.dot{background:#10b981!important;box-shadow:0 0 12px #10b981!important;animation:foundryPulse 2s infinite}
+@keyframes foundryPulse{0%,100%{box-shadow:0 0 0 0 #10b98166}50%{box-shadow:0 0 0 7px #10b98100}}
+header button,header a{background:rgba(15,23,42,.76)!important;border:1px solid rgba(255,255,255,.1)!important;color:#dce9f8!important;border-radius:12px!important}
+header button:hover,header a:hover{border-color:#00dce7!important;background:#0c3144!important}
+main{gap:14px;padding:14px}
+#viewport{border:1px solid rgba(0,242,254,.2)!important;border-radius:20px!important;background:linear-gradient(145deg,#0b1b31,#10243c 60%,#071326)!important;box-shadow:0 28px 80px #0008,inset 0 1px #ffffff0b!important}
+#scene{filter:saturate(1.06) contrast(1.02)}
+.badge,.legend span,.hint{background:rgba(7,16,32,.82)!important;border:1px solid rgba(0,242,254,.18)!important;backdrop-filter:blur(16px);box-shadow:0 10px 28px #0005}
+.badge strong{color:#00e5ee!important}
+.viewControls button{background:rgba(8,20,39,.88)!important;border:1px solid rgba(255,255,255,.12)!important;border-radius:12px!important}
+.viewControls button:hover{border-color:#00e5ee!important;color:#fff}
+#panel{background:linear-gradient(160deg,rgba(12,23,43,.94),rgba(6,15,30,.96))!important;border:1px solid rgba(0,242,254,.17)!important;border-radius:20px!important;box-shadow:0 25px 70px #0007,inset 0 1px #ffffff0b;padding:18px!important;backdrop-filter:blur(18px)}
+.eyebrow{color:#54e6e7!important;letter-spacing:.18em}
+.title{color:#f5f8ff!important;letter-spacing:-.035em}
+.desc{color:#a9b9ce!important}
+.metric{background:rgba(7,19,37,.82)!important;border:1px solid rgba(114,157,205,.17)!important;border-radius:14px!important;box-shadow:inset 0 1px #ffffff08}
+.metric label{color:#9db0c9!important}
+.metric strong{color:#f4f8ff}
+.metric small{color:#8ca4bf!important}
+.section{border-color:rgba(123,164,211,.18)!important}
+.section h3{color:#a7c0d8!important;letter-spacing:.15em}
+.sectorBtn{background:rgba(16,32,57,.8)!important;border:1px solid rgba(255,255,255,.08)!important;border-radius:12px!important;color:#d6e5f4!important}
+.sectorBtn:hover{border-color:#00dce7!important;background:#12314b!important}
+.sectorBtn.active{background:linear-gradient(135deg,#0b4353,#12304d)!important;border-color:#00e2ec!important;box-shadow:inset 3px 0 #00e2ec,0 0 18px #00dce71c!important}
+.sectorBtn .ico{background:#123b50!important;color:#58e8e4!important;border-radius:9px!important}
+.flowItem{color:#a9bad0!important}
+.flowItem.active{color:#fff!important}
+.num{background:#12334b!important;color:#69e9e4!important}
+.flowItem.active .num{background:#f3a64b!important;color:#172033!important}
+.bar{background:#172b46!important}
+.bar span{background:linear-gradient(90deg,#00d9df,#10b981,#f6b65e)!important}
+button{border:1px solid rgba(255,255,255,.12)!important;background:rgba(17,35,60,.86)!important;border-radius:12px!important}
+button:hover{border-color:#00e4ec!important;background:#123b50!important}
+button.primary{background:linear-gradient(110deg,#00e2db,#38a8e9)!important;color:#041521!important;border:0!important;box-shadow:0 8px 24px #00cdd733}
+.footerNote{color:#8299b4!important}
+#toast{background:rgba(7,21,39,.94)!important;border:1px solid #00dce766!important;color:#eafcff!important;backdrop-filter:blur(16px);box-shadow:0 12px 40px #0008}
+#layersPanel{position:absolute;right:14px;top:70px;z-index:8;width:min(290px,calc(100% - 28px));padding:15px;border-radius:16px;background:rgba(5,13,27,.94);border:1px solid rgba(0,242,254,.25);box-shadow:0 24px 60px #0009;backdrop-filter:blur(18px)}
+#layersPanel.hidden{display:none}
+#layersPanel h3{font-size:10px;letter-spacing:.16em;color:#69e6e8;margin:0 0 12px;text-transform:uppercase}
+.layerRow{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:9px 7px;border-top:1px solid #ffffff10;font-size:11px;color:#c5d5e8}
+.layerRow input{accent-color:#00dce7;width:16px;height:16px}
+.headerActions{display:flex;align-items:center;gap:7px;flex-wrap:wrap}
+@media(max-width:900px),(pointer:coarse){main{padding:8px!important;gap:8px!important}#panel{padding:13px!important;border-radius:15px!important}header{padding:9px 11px!important}.headerActions{gap:5px}.headerActions a{font-size:9px!important;padding:6px 7px!important}.headerActions button{font-size:9px;padding:6px 8px}.logo{border-radius:10px}}
+@media(max-width:520px){#layersPanel{top:55px;right:8px}.headerActions .cityLink{display:none}}
 </style></head>
 <body><div id="app">
-<header><div class="brand"><div class="logo">↻</div><div><h1>CENTRO INTEGRADO · LOGÍSTICA REVERSA</h1><div class="sub">Gêmeo digital operacional · Projeto acadêmico</div></div></div><div class="headerRight"><a href="../sistema-logistica/" style="font-size:11px;color:#8ee7d7;text-decoration:none;border:1px solid #31535f;padding:8px 10px;border-radius:9px">Sistema de frota e resíduos ↗</a><span class="live"><i class="dot"></i> SIMULAÇÃO ATIVA</span><button id="resetTop">Visão geral</button></div></header>
+<header><div class="brand"><div class="logo">↻</div><div><h1>CENTRO INTEGRADO · LOGÍSTICA REVERSA</h1><div class="sub">Gêmeo digital operacional · Projeto acadêmico</div></div></div><div class="headerRight headerActions"><a href="../sistema-logistica/" style="font-size:11px;text-decoration:none;padding:8px 10px">Sistema de frota e resíduos ↗</a><a class="cityLink" href="../simulacao-imersiva/#rastreamento" style="font-size:11px;text-decoration:none;padding:8px 10px">Mapa metropolitano ↗</a><span class="live"><i class="dot"></i> SIMULAÇÃO ATIVA</span><button id="layersToggle">☷ Camadas</button><button id="resetTop">Visão geral</button></div></header><div id="layersPanel" class="hidden"><h3>Controle de visibilidade</h3><label class="layerRow"><span>Racks e estoque do armazém</span><input id="layerWarehouse" type="checkbox" checked></label><label class="layerRow"><span>Rotas internas de materiais</span><input id="layerRoutes" type="checkbox" checked></label><label class="layerRow"><span>Veículo e carga em rastreio</span><input id="layerFleet" type="checkbox" checked></label><label class="layerRow"><span>Etiquetas dos setores</span><input id="layerLabels" type="checkbox" checked></label></div>
 <main><section id="viewport"><canvas id="scene" aria-label="Maquete tridimensional interativa"></canvas>
 <div class="hudTop"><div class="badge"><strong>OPERAÇÃO 01</strong><br>Retorno · triagem · destinação</div><div class="viewControls"><button id="orbitBtn">⟳ Órbita</button><button id="labelsBtn">Etiquetas: ON</button></div></div>
 <div class="legend"><span><i class="sw" style="background:#39d4c2"></i>Reutilização</span><span><i class="sw" style="background:#ffad59"></i>Reparo</span><span><i class="sw" style="background:#67b5f5"></i>Reciclagem</span><span><i class="sw" style="background:#a7aeb5"></i>Descarte controlado</span></div><div class="hint">Arraste para girar · pinça/roda para aproximar · toque em um setor</div><div id="toast"></div></section>
@@ -81,7 +135,7 @@ const mats={ground:mat('#a8b6b7'),asphalt:mat('#26343b'),concrete:mat('#c5ccca')
 function mat(c,rough=.8){return new THREE.MeshStandardMaterial({color:c,roughness:rough})}
 function box(parent,x,y,z,w,h,d,material,opts={}){const o=new THREE.Mesh(new THREE.BoxGeometry(w,h,d),material);o.position.set(x,y,z);o.castShadow=opts.cast!==false;o.receiveShadow=true;parent.add(o);return o}
 function cyl(parent,x,y,z,r,h,material,rot=0){const o=new THREE.Mesh(new THREE.CylinderGeometry(r,r,h,16),material);o.position.set(x,y,z);o.rotation.z=rot;o.castShadow=true;parent.add(o);return o}
-function line(parent,pts,color='#39d4c2',radius=.055){const curve=new THREE.CatmullRomCurve3(pts.map(p=>new THREE.Vector3(...p)));const o=new THREE.Mesh(new THREE.TubeGeometry(curve,50,radius,8,false),mat(color,.45));parent.add(o);return o}
+const routeObjects=[];function line(parent,pts,color='#39d4c2',radius=.055){const curve=new THREE.CatmullRomCurve3(pts.map(p=>new THREE.Vector3(...p)));const o=new THREE.Mesh(new THREE.TubeGeometry(curve,50,radius,8,false),mat(color,.45));parent.add(o);routeObjects.push(o);return o}
 function label(text,x,y,z,color='#eaf5f7',size=1.0){const c=document.createElement('canvas'),ctx=c.getContext('2d');ctx.font='700 40px Arial';const w=Math.max(220,ctx.measureText(text).width+36);c.width=w;c.height=68;ctx.font='700 40px Arial';ctx.fillStyle='#071923dd';ctx.beginPath();ctx.roundRect(0,0,w,68,12);ctx.fill();ctx.strokeStyle=color;ctx.lineWidth=3;ctx.stroke();ctx.fillStyle=color;ctx.fillText(text,18,47);const tex=new THREE.CanvasTexture(c);tex.colorSpace=THREE.SRGBColorSpace;const m=new THREE.Sprite(new THREE.SpriteMaterial({map:tex,transparent:true,depthTest:false}));m.position.set(x,y,z);m.scale.set(size*w/68,size,1);m.userData.isLabel=true;scene.add(m);return m}
 const floor=box(scene,0,-.5,0,100,1,82,mats.ground,{cast:false});floor.name='floor';
 box(scene,0,-.01,0,96,.08,78,mats.concrete,{cast:false});
@@ -259,6 +313,14 @@ document.querySelectorAll('.sectorBtn').forEach(b=>b.addEventListener('click',()
 document.querySelector('#resetTop').onclick=()=>{shipmentAnimating=false;selectedShipment=false;shipmentProgress=0;shipment.position.set(-37,0,13);truck.position.set(0,0,29);setSector('overview');updateStage()};
 document.querySelector('#orbitBtn').onclick=()=>{controls.autoRotate=!controls.autoRotate;controls.autoRotateSpeed=.7;document.querySelector('#orbitBtn').textContent=controls.autoRotate?'⏸ Parar órbita':'⟳ Órbita'};
 document.querySelector('#labelsBtn').onclick=()=>{labelsOn=!labelsOn;scene.traverse(o=>{if(o.userData.isLabel)o.visible=labelsOn});document.querySelector('#labelsBtn').textContent='Etiquetas: '+(labelsOn?'ON':'OFF')};
+const layersPanel=document.querySelector('#layersPanel');
+document.querySelector('#layersToggle').onclick=()=>layersPanel.classList.toggle('hidden');
+document.querySelector('#layerWarehouse').onchange=e=>{if(sectorGroups.armazem)sectorGroups.armazem.visible=e.target.checked};
+document.querySelector('#layerRoutes').onchange=e=>routeObjects.forEach(o=>o.visible=e.target.checked);
+document.querySelector('#layerFleet').onchange=e=>{truck.visible=e.target.checked;shipment.visible=e.target.checked};
+document.querySelector('#layerLabels').onchange=e=>{labelsOn=e.target.checked;scene.traverse(o=>{if(o.userData.isLabel)o.visible=labelsOn});document.querySelector('#labelsBtn').textContent='Etiquetas: '+(labelsOn?'ON':'OFF')};
+document.addEventListener('pointerdown',e=>{if(!layersPanel.contains(e.target)&&e.target.id!=='layersToggle')layersPanel.classList.add('hidden')});
+
 function updateStage(){const i=Math.max(0,stage);document.querySelector('#mStep').textContent=String(i+1).padStart(2,'0')+'/05';document.querySelector('#progress').style.width=((i+1)/5*100)+'%';document.querySelector('#flowPct').textContent=Math.round((i+1)/5*100)+'%';document.querySelector('#flowStatus').textContent=stage<0?'Pronto para iniciar':stages[i][0];document.querySelector('#mItems').textContent=[128,128,124,92,92][i];document.querySelector('#mRecovery').textContent=['72%','72%','69%','72%','72%'][i];document.querySelector('#flow').innerHTML='';stages.forEach((s,j)=>{const e=document.createElement('div');e.className='flowItem'+(j===stage?' active':'');e.innerHTML='<span class="num">'+String(j+1).padStart(2,'0')+'</span><span><b>'+s[0]+'</b><br>'+s[1]+'</span>';document.querySelector('#flow').appendChild(e)});document.querySelector('#flowHeading').textContent='Fluxo de logística reversa';document.querySelector('#flowStatus').textContent=stage<0?'Pronto para iniciar':stages[stage][0];document.querySelector('#startBtn').textContent=running?'Ⅱ Pausar operação':stage>=4?'↻ Reiniciar operação':'▶ '+(stage<0?'Iniciar operação':'Continuar operação')}
 function advance(){if(stage>=4){stage=-1;truck.position.copy(truckStart);animStart=performance.now();updateStage();return}stage++;animStart=performance.now();if(stage===0){truck.position.copy(truckStart);animateCamera(new THREE.Vector3(-37,13,39),new THREE.Vector3(-25,0,24));toast('Etapa 1: veículo inicia a coleta de retorno')}if(stage===1){animateCamera(new THREE.Vector3(-20,15,13),new THREE.Vector3(-10,0,-5));toast('Etapa 2: recebimento no armazém')}if(stage===2){animateCamera(new THREE.Vector3(-4,12,28),new THREE.Vector3(-8,0,17));toast('Etapa 3: inspeção e triagem')}if(stage===3){animateCamera(new THREE.Vector3(0,15,25),new THREE.Vector3(-8,0,17));toast('Etapa 4: materiais seguem à destinação')}if(stage===4){animateCamera(new THREE.Vector3(24,17,6),new THREE.Vector3(10,0,-3));toast('Etapa 5: dados consolidados para Administração e Gestão')}updateStage()}
 document.querySelector('#nextBtn').onclick=()=>{if(selectedShipment){startShipment()}else advance()};document.querySelector('#startBtn').onclick=()=>{if(selectedShipment){if(shipmentAnimating){shipmentAnimating=false;document.querySelector('#startBtn').textContent='▶ Retomar rastreio'}else{shipmentAnimating=true;shipmentLastTime=performance.now();document.querySelector('#startBtn').textContent='Ⅱ Pausar rastreio'}return}if(stage>=4){stage=-1;advance();running=true}else if(!running){running=true;if(stage<0)advance();document.querySelector('#startBtn').textContent='Ⅱ Pausar operação'}else{running=false;document.querySelector('#startBtn').textContent='▶ Continuar operação'}};
