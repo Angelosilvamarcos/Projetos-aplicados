@@ -72,9 +72,9 @@ const canvas=document.querySelector('#scene'), viewport=document.querySelector('
 function applyDeviceLayout(){const mobile=window.innerWidth<=900||window.screen.width<=900||window.matchMedia('(pointer:coarse)').matches;document.documentElement.classList.toggle('mobile-layout',mobile);document.body.classList.toggle('mobile-layout',mobile);requestAnimationFrame(()=>{if(typeof resize==='function')resize()})}
 applyDeviceLayout();window.addEventListener('resize',applyDeviceLayout);window.addEventListener('orientationchange',()=>setTimeout(applyDeviceLayout,220));
 const scene=new THREE.Scene(); scene.background=new THREE.Color('#102b37'); scene.fog=new THREE.Fog('#102b37',65,135);
-const camera=new THREE.PerspectiveCamera(48,1,.1,300); camera.position.set(0,112,24);
+const camera=new THREE.PerspectiveCamera(48,1,.1,300); camera.position.set(0,88,42);
 const renderer=new THREE.WebGLRenderer({canvas,antialias:true,alpha:false});renderer.setPixelRatio(Math.min(window.devicePixelRatio||1,1.5));renderer.shadowMap.enabled=true;renderer.shadowMap.type=THREE.PCFSoftShadowMap;renderer.outputColorSpace=THREE.SRGBColorSpace;renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=1.15;
-const controls=new OrbitControls(camera,renderer.domElement);controls.enableDamping=true;controls.dampingFactor=.06;controls.maxPolarAngle=Math.PI*.48;controls.minDistance=8;controls.maxDistance=180;controls.target.set(0,0,2);controls.maxPolarAngle=Math.PI*.49;
+const controls=new OrbitControls(camera,renderer.domElement);controls.enableDamping=true;controls.dampingFactor=.06;controls.maxPolarAngle=Math.PI*.48;controls.minDistance=8;controls.maxDistance=180;controls.target.set(0,0,1);controls.maxPolarAngle=Math.PI*.49;
 scene.add(new THREE.HemisphereLight(0xc9e8ff,0x35433b,2.1));
 const sun=new THREE.DirectionalLight(0xfff0d9,3.2);sun.position.set(-25,40,22);sun.castShadow=true;sun.shadow.mapSize.set(2048,2048);sun.shadow.camera.left=-55;sun.shadow.camera.right=55;sun.shadow.camera.top=55;sun.shadow.camera.bottom=-55;scene.add(sun);
 const mats={ground:mat('#a8b6b7'),asphalt:mat('#26343b'),concrete:mat('#c5ccca'),wall:mat('#d5dedb'),roof:mat('#234854'),steel:mat('#506772'),dark:mat('#182a31'),teal:mat('#20b9ac'),orange:mat('#ff9d43'),blue:mat('#4c9fe8'),grey:mat('#909fa5'),box:mat('#c28a50'),pallet:mat('#8b6845'),glass:mat('#4e8292'),white:mat('#edf2ed'),green:mat('#428d69'),red:mat('#c75b4d')};
@@ -113,8 +113,96 @@ function management(){const g=zone('gestao','Gestão',18,5,19,16,'#ffad59');
 box(g,0,.85,0,7,.3,3.5,mats.dark);for(let i=0;i<6;i++){let x=-3+(i%3)*3,z=-2+Math.floor(i/3)*4;cyl(g,x,.6,z,.38,.7,mats.orange)}box(g,-5,2,-4,3,1.5,.15,mats.glass);label('GESTÃO · CENTRO DE CONTROLE',18,8,5,'#ffc27f',1.1);return g}
 function triage(){const g=zone('triagem','Triagem reversa',-8,17,28,9,'#ff9d43');for(let i=0;i<3;i++){const x=-16+i*8;box(g,x,1,0,6,1.5,5,i===0?mats.teal:i===1?mats.orange:mats.blue);box(g,x,1.9,0,6,.25,5,mats.steel);for(let j=0;j<3;j++)box(g,x-1.5+j*1.5,2.35,0,1.2,.7,1.3,i===0?mats.green:i===1?mats.orange:mats.blue)}label('TRIAGEM · DESTINAÇÃO',-8,5,17,'#ffc27f',1.15);return g}
 function fleet(){const g=zone('frota','Frota e transporte',-29,3,13,22,'#9bb9c4');for(let i=0;i<3;i++){const z=-5+i*7;makeTruck(g,-1,0,z,i===0?mats.teal:mats.blue)}label('FROTA · DOCA',-29,6,3,'#b9d7df',1.05);return g}
-function makeTruck(parent,x,y,z,color){const g=new THREE.Group();g.position.set(x,y,z);parent.add(g);box(g,0,1.1,0,3.3,1.7,5.4,mat('#e4e9e7'));box(g,0,1.45,3.1,3.2,2.1,1.5,color);box(g,0,1.65,3.88,2.5,.7,.08,mats.glass);for(const wx of [-1.25,1.25])for(const wz of [-1.7,1.8,3.2]){cyl(g,wx,.45,wz,.48,.32,mats.dark,Math.PI/2);cyl(g,wx,.45,wz+.02,.22,.34,mats.steel,Math.PI/2)}return g}
+function makeTruck(parent,x,y,z,color){
+ const g=new THREE.Group();g.position.set(x,y,z);parent.add(g);
+ box(g,0,.72,0,2.9,.45,6.2,mats.dark);
+ box(g,0,1.55,-.45,3.05,2.15,4.1,mat('#e9efef'));
+ box(g,0,1.72,-.45,3.08,.16,4.05,mat('#c5d2d4'));
+ box(g,0,1.52,2.35,3.05,2.35,2.05,color);
+ box(g,0,2.67,2.35,3.1,.16,2.1,mats.white);
+ box(g,0,1.58,3.48,2.8,2.05,1.45,mat('#edf2f1'));
+ box(g,0,2.02,4.02,2.15,.86,.08,mats.glass);
+ box(g,0,.83,4.2,2.9,.28,.35,mats.steel);
+ box(g,-1.18,1.85,3.48,.13,.58,.12,mats.dark);box(g,1.18,1.85,3.48,.13,.58,.12,mats.dark);
+ box(g,0,1.12,-.42,3.08,.16,4.05,mat('#1c7778'));
+ const decalCanvas=document.createElement('canvas');decalCanvas.width=512;decalCanvas.height=128;
+ const dc=decalCanvas.getContext('2d');dc.fillStyle='#f4f7f4';dc.fillRect(0,0,512,128);
+ dc.fillStyle='#c92d32';dc.font='900 68px Arial';dc.fillText('JSL',18,80);
+ dc.fillStyle='#168b54';dc.font='900 44px Arial';dc.fillText('ODS ♻',185,77);
+ const decalTex=new THREE.CanvasTexture(decalCanvas);decalTex.colorSpace=THREE.SRGBColorSpace;
+ const decal=new THREE.Mesh(new THREE.PlaneGeometry(2.25,.56),new THREE.MeshBasicMaterial({map:decalTex,transparent:true,side:THREE.DoubleSide}));
+ decal.position.set(0,1.72,-2.52);g.add(decal);
+ for(const wx of [-1.48,1.48])for(const wz of [-2.05,.15,2.65]){
+  cyl(g,wx,.52,wz,.53,.34,mats.dark,Math.PI/2);
+  cyl(g,wx*1.01,.52,wz,.29,.36,mats.steel,Math.PI/2);
+  cyl(g,wx*1.02,.52,wz,.12,.38,mat('#c4d0d0'),Math.PI/2);
+ }
+ for(const sx of [-1,1]){
+  box(g,sx*1.13,1.12,4.22,.42,.2,.12,mat('#f9e7a7'));
+  box(g,sx*1.1,1.15,-2.52,.28,.18,.1,mats.red);
+  box(g,sx*1.63,2.05,3.55,.45,.12,.18,mats.dark);
+  box(g,sx*1.85,2.02,3.55,.08,.08,.08,mats.glass);
+ }
+ box(g,0,1.62,-2.58,2.45,1.65,.12,mat('#aebcbd'));
+ box(g,0,1.05,-2.68,1.45,.28,.1,mats.dark);
+ return g;
+}
 const wh=warehouse(),of=office(),mg=management(),tr=triage(),fl=fleet();
+
+function makeWorker(parent,x,z,shirt=mats.orange,scale=1){
+ const g=new THREE.Group();g.position.set(x,0,z);g.scale.setScalar(scale);parent.add(g);
+ const skin=mat('#b87953'),pants=mat('#26384a'),boot=mat('#101b25'),helmet=mat('#f3c64e');
+ box(g,0,1.18,0,.48,.78,.3,shirt);box(g,0,.78,0,.53,.12,.32,mat('#e9d9a7'));
+ const head=new THREE.Mesh(new THREE.SphereGeometry(.19,12,10),skin);head.position.set(0,1.72,.02);g.add(head);
+ const hat=new THREE.Mesh(new THREE.SphereGeometry(.22,12,8,0,Math.PI*2,0,Math.PI/2),helmet);hat.position.set(0,1.88,.02);g.add(hat);
+ for(const sx of [-1,1]){box(g,sx*.14,.42,0,.17,.62,.2,pants);box(g,sx*.14,.1,.07,.2,.18,.34,boot);const arm=box(g,sx*.34,1.28,.02,.15,.62,.16,shirt);arm.rotation.z=sx*.18}
+ box(g,0,1.3,.17,.42,.08,.025,mat('#f6efc6'),{cast:false});return g;
+}
+function makePalletLoad(parent,x,z,color=mats.box,layers=2){
+ const g=new THREE.Group();g.position.set(x,0,z);parent.add(g);box(g,0,.18,0,2.2,.28,1.8,mats.pallet);
+ for(let i=0;i<3;i++)box(g,-.7+i*.7,.34,0,.12,.1,1.7,mats.dark);
+ for(let y=0;y<layers;y++)for(let i=0;i<2;i++)box(g,-.48+i*.96,.75+y*.72,0,.88,.65,.82,color);
+ for(let y=0;y<layers;y++)box(g,0,.75+y*.72,.43,.9,.04,.03,mats.white,{cast:false});return g;
+}
+function makeBin(parent,x,z,color,labelText){
+ const g=new THREE.Group();g.position.set(x,0,z);parent.add(g);
+ box(g,0,.62,0,1.8,1.2,1.55,color);box(g,0,1.25,0,1.92,.12,1.65,mats.dark);
+ for(const sx of [-.65,.65])cyl(g,sx,.2,.82,.16,.18,mats.dark,Math.PI/2);
+ box(g,0,.9,.79,.95,.36,.05,mats.white,{cast:false});return g;
+}
+function makeConveyor(parent,x,z,length=9,angle=0){
+ const g=new THREE.Group();g.position.set(x,0,z);g.rotation.y=angle;parent.add(g);
+ box(g,0,1.15,0,length,.3,1.55,mats.dark);box(g,0,1.34,0,length-.25,.08,1.32,mat('#536c78'));
+ for(let i=-length/2+.35;i<length/2;i+=.55)cyl(g,i,1.43,0,.12,1.35,mats.steel,Math.PI/2);
+ for(const sx of [-1,1]){box(g,0,.58,sx*.62,length,.12,.12,mats.steel);for(let x=-length/2+.4;x<length/2;x+=2)box(g,x,.85,sx*.62,.12,.7,.12,mats.steel)}
+ for(let i=0;i<5;i++)box(g,-length/2+1+i*1.45,1.62,(i%2?-.25:.2),.8,.42,.7,[mats.orange,mats.blue,mats.green,mats.box,mats.grey][i]);return g;
+}
+function makeLightPole(parent,x,z){
+ const g=new THREE.Group();g.position.set(x,0,z);parent.add(g);cyl(g,0,4,0,.12,8,mats.steel);
+ box(g,.55,7.9,0,1.25,.12,.35,mats.dark);
+ const lamp=new THREE.PointLight(0xffe5b3,.45,15);lamp.position.set(.55,7.5,0);g.add(lamp);box(g,.55,7.75,0,.55,.15,.3,mat('#f8e8b7'));return g;
+}
+function addIndustrialDetail(){
+ for(let z=-10;z<=5;z+=5){box(wh,0,9.7,z,31,.22,.22,mats.steel);for(let x=-15;x<=15;x+=5)box(wh,x,9.1,z,.16,1.2,.16,mats.steel);for(let x=-15;x<15;x+=3)box(wh,x,10,z,2.8,.12,4.6,mat('#718b94'))}
+ for(let x=-15;x<=15;x+=7.5){box(wh,x,8.7,11,.22,8,.22,mats.steel);box(wh,x,8.7,-11,.22,8,.22,mats.steel)}
+ for(let i=0;i<3;i++){const x=-13+i*12;box(wh,x,1.65,12.05,5.2,3.2,.32,mats.dark);box(wh,x,3.35,12.22,5.4,.18,.2,mats.orange);box(wh,x,.55,12.45,4.6,.35,.85,mats.steel);for(const sx of [-1,1])box(wh,x+sx*2.55,1.25,12.45,.28,1.5,.35,mats.grey)}
+ box(wh,0,5.3,14,34,.35,5,mats.roof);for(let x=-15;x<=15;x+=5)box(wh,x,4.8,14,.18,1,.18,mats.steel);
+ for(let i=0;i<5;i++){const x=-14+i*6;box(wh,x,1.2,5,.15,2,.15,mats.orange);box(wh,x,2.2,5,2,.12,.12,mats.orange)}
+ for(let i=0;i<4;i++)box(wh,-15+i*9,.14,13,3.5,.05,.16,mat('#e6bd53'),{cast:false});
+ makeConveyor(tr,-8,-1,12,-.08);makeConveyor(tr,5,-1,10,.06);
+ makeBin(tr,-18,-3,mats.blue,'PLÁSTICO');makeBin(tr,-13,-3,mats.orange,'METAL');makeBin(tr,12,-3,mats.green,'PAPEL');makeBin(tr,17,-3,mats.grey,'VIDRO');
+ box(tr,0,1.1,4,5,2.1,3,mats.steel);box(tr,0,2.25,4,5.1,.18,3.1,mats.orange);
+ for(let i=0;i<4;i++)makePalletLoad(tr,9+i*3,5,i%2?mats.blue:mats.green,2);
+ makeWorker(wh,-5,5,mats.orange,.9);makeWorker(wh,5,4,mats.orange,.9);makeWorker(wh,11,-2,mats.orange,.9);
+ makeWorker(tr,-15,4,mats.orange,1);makeWorker(tr,2,4,mats.orange,1);makeWorker(tr,14,4,mats.orange,1);
+ makeWorker(of,-5,3,mats.blue,.82);makeWorker(mg,2,2,mats.orange,.82);
+ makePalletLoad(scene,-25,20,mats.box,2);makePalletLoad(scene,-20,20,mats.blue,2);
+ makeBin(scene,24,22,mats.green,'REUTILIZAÇÃO');makeBin(scene,28,22,mats.blue,'RECICLAGEM');
+ for(let x=-40;x<=40;x+=20)makeLightPole(scene,x,18);
+ for(let x=-43;x<=43;x+=8){box(scene,x,.08,24,5,.025,.12,mat('#f1d27a'),{cast:false});box(scene,x,.08,34,5,.025,.12,mat('#f1d27a'),{cast:false})}
+ for(let x=-44;x<=44;x+=11){cyl(scene,x,1.2,-37,.22,2.4,mat('#66523c'));const crown=new THREE.Mesh(new THREE.SphereGeometry(1.5,10,8),mat('#315d4a'));crown.position.set(x,3,-37);scene.add(crown)}
+}
+addIndustrialDetail();
 function forklift(parent,x,z){const g=new THREE.Group();g.position.set(x,0,z);parent.add(g);box(g,0,.8,0,1.6,.7,2,mats.orange);box(g,0,1.55,-.25,1.1,1.1,.12,mats.steel);box(g,0,1.4,.8,.12,1.7,.12,mats.dark);box(g,.45,1.4,.8,.12,1.7,.12,mats.dark);box(g,.25,.55,1.35,1.2,.12,.65,mats.steel);for(let wx of [-.65,.65])for(let wz of [-.55,.65])cyl(g,wx,.35,wz,.28,.22,mats.dark,Math.PI/2);return g}
 forklift(wh,9,4);forklift(wh,-7,5);
 const truck=makeTruck(scene,0,0,29,mats.teal);truck.userData.moving=true;
@@ -165,7 +253,7 @@ triagem:{eyebrow:'LOGÍSTICA REVERSA · DESTINAÇÃO',title:'Triagem reversa',de
 const stages=[['Coleta de retorno','Veículo coleta os materiais no cliente.'],['Recebimento','Carga é descarregada e identificada no centro.'],['Inspeção e triagem','Equipe registra condição e categoria de cada item.'],['Destinação','Itens seguem para reuso, reparo, reciclagem ou descarte.'],['Fechamento e indicadores','Estoque, custos e resultados alimentam Administração e Gestão.']];
 let stage=-1,running=false,animStart=0,truckStart=new THREE.Vector3(0,0,29),truckEnd=new THREE.Vector3(-29,0,3);
 function toast(s){const el=document.querySelector('#toast');el.textContent=s;el.classList.add('show');setTimeout(()=>el.classList.remove('show'),2200)}
-function setSector(id){const d=sectorData[id]||sectorData.overview;document.querySelector('#eyebrow').textContent=d.eyebrow;document.querySelector('#panelTitle').textContent=d.title;document.querySelector('#panelDesc').textContent=d.desc;document.querySelectorAll('.sectorBtn').forEach(b=>b.classList.toggle('active',b.dataset.sector===id));document.querySelector('#flowHeading').textContent=id==='overview'?'Fluxo de logística reversa':'Responsabilidades do setor';const f=document.querySelector('#flow');f.innerHTML='';const items=d.items||stages.map(s=>s[0]+' — '+s[1]);items.forEach((s,i)=>{const e=document.createElement('div');e.className='flowItem'+(i===stage?' active':'');e.innerHTML='<span class="num">'+String(i+1).padStart(2,'0')+'</span><span>'+s+'</span>';f.appendChild(e)});if(id!=='overview'){const p=new THREE.Vector3(...d.pos),t=new THREE.Vector3(...d.target);animateCamera(p,t);toast('Setor selecionado: '+d.title)}else{animateCamera(new THREE.Vector3(0,112,24),new THREE.Vector3(0,0,2))}}
+function setSector(id){const d=sectorData[id]||sectorData.overview;document.querySelector('#eyebrow').textContent=d.eyebrow;document.querySelector('#panelTitle').textContent=d.title;document.querySelector('#panelDesc').textContent=d.desc;document.querySelectorAll('.sectorBtn').forEach(b=>b.classList.toggle('active',b.dataset.sector===id));document.querySelector('#flowHeading').textContent=id==='overview'?'Fluxo de logística reversa':'Responsabilidades do setor';const f=document.querySelector('#flow');f.innerHTML='';const items=d.items||stages.map(s=>s[0]+' — '+s[1]);items.forEach((s,i)=>{const e=document.createElement('div');e.className='flowItem'+(i===stage?' active':'');e.innerHTML='<span class="num">'+String(i+1).padStart(2,'0')+'</span><span>'+s+'</span>';f.appendChild(e)});if(id!=='overview'){const p=new THREE.Vector3(...d.pos),t=new THREE.Vector3(...d.target);animateCamera(p,t);toast('Setor selecionado: '+d.title)}else{animateCamera(new THREE.Vector3(0,88,42),new THREE.Vector3(0,0,1))}}
 let camAnim=null;function animateCamera(pos,target){camAnim={from:camera.position.clone(),to:pos,tf:controls.target.clone(),tt:target,start:performance.now(),dur:850}}
 document.querySelectorAll('.sectorBtn').forEach(b=>b.addEventListener('click',()=>setSector(b.dataset.sector)));
 document.querySelector('#resetTop').onclick=()=>{shipmentAnimating=false;selectedShipment=false;shipmentProgress=0;shipment.position.set(-37,0,13);truck.position.set(0,0,29);setSector('overview');updateStage()};
