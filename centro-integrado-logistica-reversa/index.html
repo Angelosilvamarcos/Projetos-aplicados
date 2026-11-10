@@ -102,12 +102,103 @@ button.primary{background:linear-gradient(110deg,#00e2db,#38a8e9)!important;colo
 .headerActions{display:flex;align-items:center;gap:7px;flex-wrap:wrap}
 @media(max-width:900px),(pointer:coarse){main{padding:8px!important;gap:8px!important}#panel{padding:13px!important;border-radius:15px!important}header{padding:9px 11px!important}.headerActions{gap:5px}.headerActions a{font-size:9px!important;padding:6px 7px!important}.headerActions button{font-size:9px;padding:6px 8px}.logo{border-radius:10px}}
 @media(max-width:520px){#layersPanel{top:55px;right:8px}.headerActions .cityLink{display:none}}
+
+/* Warehouse Control Tower layout, inspired by the supplied reference */
+#app{grid-template-rows:auto auto minmax(0,1fr)!important;background:radial-gradient(ellipse at 55% -10%,#1b2b55 0,#0b142b 52%,#050914 100%)!important}
+header{padding:10px 16px!important;background:rgba(3,8,20,.94)!important;border-bottom:1px solid #1c3154!important}
+header .brand h1{font-size:13px;letter-spacing:.11em}
+header .sub{font-size:9px}
+#controlToolbar{z-index:6;display:flex;align-items:center;gap:9px;padding:8px 12px;background:rgba(5,11,25,.94);border-bottom:1px solid #1c3154;overflow-x:auto;scrollbar-width:none;white-space:nowrap}
+#controlToolbar::-webkit-scrollbar{display:none}
+.toolbarGroup{display:flex;align-items:center;gap:5px}
+.modeBtn{height:32px;padding:0 12px!important;border-radius:8px!important;background:linear-gradient(180deg,#172440,#101a30)!important;border:1px solid #26385c!important;color:#aebed8!important;font-size:10px!important;font-weight:650;letter-spacing:.02em}
+.modeBtn:hover{background:#1c3154!important;color:#fff!important;border-color:#4e8cc4!important}
+.modeBtn.active{background:linear-gradient(135deg,#1a4262,#1a3154)!important;color:#f5fbff!important;border-color:#4d9bce!important;box-shadow:inset 0 0 0 1px #4d9bce33,0 0 15px #3889c522}
+.modeBtn span{margin-left:4px}
+.modeBtn.towerBtn{background:linear-gradient(135deg,#174b42,#173b38)!important;border-color:#2e7667!important;color:#c2f5e5!important}
+.toolbarDivider{height:23px;width:1px;background:#283957;flex:0 0 1px}
+.toolbarStats{margin-left:auto;display:flex;gap:12px;padding:0 5px;color:#8195b8;font-size:8px;letter-spacing:.1em}
+.toolbarStats span{display:flex;gap:4px;align-items:center}
+.toolbarStats b{font-size:11px;color:#d9eaff;letter-spacing:0}
+main{display:block!important;position:relative;min-height:0;padding:10px!important}
+#viewport{position:absolute;inset:10px!important;border-radius:16px!important;border:1px solid #263a5d!important;background:radial-gradient(ellipse at 50% 35%,#17254a,#080f22 75%)!important;box-shadow:0 24px 70px #0008!important}
+#scene{filter:saturate(1.13) contrast(1.05)}
+#panel{position:absolute!important;z-index:3;left:22px;bottom:22px;width:286px;max-height:min(72%,650px);overflow:auto;border-radius:13px!important;padding:13px!important;background:rgba(4,9,21,.91)!important;border:1px solid #293c60!important;box-shadow:0 18px 45px #0009!important;backdrop-filter:blur(18px)}
+#panel .title{font-size:17px!important}
+#panel .desc{font-size:10px!important}
+#panel .metric{padding:8px!important;background:rgba(15,26,49,.86)!important}
+#panel .metric strong{font-size:17px!important}
+#panel .metric label,#panel .metric small{font-size:9px!important}
+#panel .section{padding-top:9px!important}
+#panel .sectorBtn{min-height:34px!important;font-size:9px!important;padding:5px 7px!important}
+#panel .flowItem{font-size:9px!important}
+#panel .flowItem .num{width:19px;height:19px;flex-basis:19px}
+#panel .footerNote{font-size:8px!important}
+#panel .eyebrow{font-size:8px!important}
+#viewInfoCard{position:absolute;z-index:2;right:22px;bottom:22px;width:225px;padding:12px;border-radius:12px;background:rgba(4,9,21,.9);border:1px solid #293c60;box-shadow:0 16px 40px #0008;backdrop-filter:blur(16px)}
+.viewInfoTop{display:flex;justify-content:space-between;align-items:center;gap:6px;color:#f1f6ff;font-size:10px;font-weight:750}
+.viewTag{padding:4px 7px;border-radius:20px;background:#122f48;color:#78c6f2;border:1px solid #315b7c;font-size:8px;letter-spacing:.1em}
+#viewInfoText{font-size:9px;line-height:1.5;color:#9aabc9;margin:8px 0}
+.viewInfoLegend{display:grid;gap:5px;border-top:1px solid #ffffff12;padding-top:8px}
+.viewInfoLegend span{font-size:8px;color:#b5c2da;display:flex;align-items:center;gap:6px}
+.viewInfoLegend i{display:inline-block;width:7px;height:7px;border-radius:2px}
+.hudTop{top:12px!important;left:14px!important;right:14px!important}
+.legend{bottom:15px!important;left:15px!important;max-width:50%!important}
+.hint{right:15px!important;bottom:15px!important}
+@media(max-width:900px),(pointer:coarse){
+  header{padding:8px 10px!important}
+  header .brand h1{font-size:10px}
+  header .headerActions a,header .headerActions button{font-size:9px!important;padding:6px 7px!important}
+  #controlToolbar{padding:6px 8px;gap:6px}
+  .modeBtn{height:29px;padding:0 9px!important;font-size:9px!important}
+  .toolbarStats{display:none}
+  main{padding:6px!important;display:grid!important;grid-template-columns:1fr!important;grid-template-rows:minmax(250px,48dvh) minmax(0,1fr)!important;gap:7px!important;overflow:hidden}
+  #viewport{position:relative!important;inset:auto!important;height:100%;min-height:0;border-radius:12px!important}
+  #panel{position:relative!important;left:auto!important;bottom:auto!important;width:auto!important;max-height:none!important;min-height:0;overflow-y:auto;padding:10px!important;border-radius:12px!important}
+  #panel .metrics{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+  #panel .sectors{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+  #panel .title{font-size:15px!important}
+  #viewInfoCard{display:none}
+  .legend{max-width:94%!important;bottom:7px!important;left:7px!important}
+  .legend span{font-size:8px!important;padding:4px!important}
+  .hint{display:none}
+}
+@media(max-width:520px){
+  header .live{display:none}
+  header .cityLink{display:none!important}
+  #controlToolbar{gap:5px}
+  .toolbarDivider{margin:0 1px}
+  main{grid-template-rows:minmax(235px,43dvh) minmax(0,1fr)!important}
+}
 </style></head>
 <body><div id="app">
 <header><div class="brand"><div class="logo">↻</div><div><h1>CENTRO INTEGRADO · LOGÍSTICA REVERSA</h1><div class="sub">Gêmeo digital operacional · Projeto acadêmico</div></div></div><div class="headerRight headerActions"><a href="../sistema-logistica/" style="font-size:11px;text-decoration:none;padding:8px 10px">Sistema de frota e resíduos ↗</a><a class="cityLink" href="../simulacao-imersiva/#rastreamento" style="font-size:11px;text-decoration:none;padding:8px 10px">Mapa metropolitano ↗</a><span class="live"><i class="dot"></i> SIMULAÇÃO ATIVA</span><button id="layersToggle">☷ Camadas</button><button id="resetTop">Visão geral</button></div></header><div id="layersPanel" class="hidden"><h3>Controle de visibilidade</h3><label class="layerRow"><span>Racks e estoque do armazém</span><input id="layerWarehouse" type="checkbox" checked></label><label class="layerRow"><span>Rotas internas de materiais</span><input id="layerRoutes" type="checkbox" checked></label><label class="layerRow"><span>Veículo e carga em rastreio</span><input id="layerFleet" type="checkbox" checked></label><label class="layerRow"><span>Etiquetas dos setores</span><input id="layerLabels" type="checkbox" checked></label></div>
+
+<nav id="controlToolbar" aria-label="Modos de visualização">
+  <div class="toolbarGroup">
+    <button class="modeBtn active" data-mode="3d">◧ <span>3D View</span></button>
+    <button class="modeBtn" data-mode="map2d">▦ <span>2D Map</span></button>
+    <button class="modeBtn" data-mode="aisle">▤ <span>Aisle View</span></button>
+  </div>
+  <div class="toolbarDivider"></div>
+  <div class="toolbarGroup">
+    <button class="modeBtn active" data-mode="normal">Normal</button>
+    <button class="modeBtn" data-mode="heat">Heatmap</button>
+    <button class="modeBtn" data-mode="space">Space</button>
+    <button class="modeBtn" data-mode="sku">Fast SKU</button>
+    <button class="modeBtn towerBtn" data-mode="tower">Control Tower</button>
+  </div>
+  <div class="toolbarStats"><span><b>06</b> FROTA</span><span><b>04</b> COLETA</span><span><b>02</b> APOIO</span><span><b>05</b> ETAPAS</span></div>
+</nav>
 <main><section id="viewport"><canvas id="scene" aria-label="Maquete tridimensional interativa"></canvas>
 <div class="hudTop"><div class="badge"><strong>OPERAÇÃO 01</strong><br>Retorno · triagem · destinação</div><div class="viewControls"><button id="orbitBtn">⟳ Órbita</button><button id="labelsBtn">Etiquetas: ON</button></div></div>
-<div class="legend"><span><i class="sw" style="background:#39d4c2"></i>Reutilização</span><span><i class="sw" style="background:#ffad59"></i>Reparo</span><span><i class="sw" style="background:#67b5f5"></i>Reciclagem</span><span><i class="sw" style="background:#a7aeb5"></i>Descarte controlado</span></div><div class="hint">Arraste para girar · pinça/roda para aproximar · toque em um setor</div><div id="toast"></div></section>
+<div class="legend"><span><i class="sw" style="background:#39d4c2"></i>Reutilização</span><span><i class="sw" style="background:#ffad59"></i>Reparo</span><span><i class="sw" style="background:#67b5f5"></i>Reciclagem</span><span><i class="sw" style="background:#a7aeb5"></i>Descarte controlado</span></div><div class="hint">Arraste para girar · pinça/roda para aproximar · toque em um setor</div>
+<aside id="viewInfoCard">
+  <div class="viewInfoTop"><span id="viewInfoTitle">Visão 3D integrada</span><span class="viewTag" id="viewInfoTag">NORMAL</span></div>
+  <p id="viewInfoText">Visualize o centro, os setores e as conexões físicas do fluxo de materiais. Arraste para girar e aproxime para inspecionar.</p>
+  <div class="viewInfoLegend"><span><i style="background:#39d4c2"></i>Rotas internas</span><span><i style="background:#ffad43"></i>Materiais em triagem</span><span><i style="background:#64b5f6"></i>Áreas de controle</span></div>
+</aside>
+<div id="toast"></div></section>
 <aside id="panel"><div><div class="eyebrow" id="eyebrow">VISÃO INTEGRADA</div><div class="title" id="panelTitle">A operação conectada</div><p class="desc" id="panelDesc">Explore a instalação em 3D. Selecione um setor para aproximar a câmera e entender suas responsabilidades e conexões.</p></div>
 <div class="metrics"><div class="metric"><label>Etapa do fluxo</label><strong id="mStep">01/05</strong><small>processo demonstrativo</small></div><div class="metric"><label>Materiais triados</label><strong id="mItems">128</strong><small>unidades ilustrativas</small></div><div class="metric"><label>Recuperação</label><strong id="mRecovery">72%</strong><small>meta de simulação</small></div><div class="metric"><label>Rastreabilidade</label><strong id="mTrace">100%</strong><small>registros do exemplo</small></div></div>
 <div class="section"><h3>Explorar áreas</h3><div class="sectors">
@@ -327,6 +418,35 @@ document.querySelector('#nextBtn').onclick=()=>{if(selectedShipment){startShipme
 const raycaster=new THREE.Raycaster(),pointer=new THREE.Vector2();let down=null;canvas.addEventListener('pointerdown',e=>{down={x:e.clientX,y:e.clientY}});
 canvas.addEventListener('pointerup',e=>{if(!down||Math.hypot(e.clientX-down.x,e.clientY-down.y)>7)return;const r=canvas.getBoundingClientRect();pointer.x=((e.clientX-r.left)/r.width)*2-1;pointer.y=-((e.clientY-r.top)/r.height)*2+1;raycaster.setFromCamera(pointer,camera);const hits=raycaster.intersectObjects(clickable,true);if(hits.length){let obj=hits[0].object;while(obj&& !obj.userData.sector&&!obj.userData.shipment)obj=obj.parent;if(obj?.userData.shipment||hits[0].object.userData.shipment){startShipment();return}let id=obj?.userData.sector||hits[0].object.userData.sector;if(id)setSector(id)}});
 function resize(){const w=viewport.clientWidth,h=viewport.clientHeight;if(!w||!h)return;renderer.setSize(w,h,false);camera.aspect=w/h;camera.updateProjectionMatrix()}if('ResizeObserver' in window){new ResizeObserver(resize).observe(viewport)}else{window.addEventListener('resize',resize)}resize();
+
+const modeDescriptions={
+ '3d':['Visão 3D integrada','NORMAL','Modelo tridimensional completo do centro, setores, docas e rotas internas.'],
+ 'map2d':['Planta operacional 2D','MAPA 2D','Vista superior para leitura da disposição dos setores, acessos e conexões logísticas.'],
+ 'aisle':['Corredores do armazém','AISLE VIEW','Aproximação dos corredores, estruturas de armazenagem e movimentação de materiais.'],
+ 'normal':['Visão normal','NORMAL','Cores naturais do modelo para leitura das instalações e dos setores.'],
+ 'heat':['Mapa de calor operacional','HEATMAP','Destaque visual ilustrativo das áreas de movimentação e concentração de atividades.'],
+ 'space':['Ocupação e espaço','SPACE','Inspeção do armazém e das áreas de estoque. Os volumes são demonstrativos.'],
+ 'sku':['Rastreio de carga / SKU','FAST SKU','Inicia o rastreamento da unidade demonstrativa ao longo do fluxo interno até a destinação.'],
+ 'tower':['Control Tower','CONTROL','Retorna à visão geral integrada com os indicadores e setores operacionais.']
+};
+function setMode(mode){
+ document.querySelectorAll('.modeBtn').forEach(b=>b.classList.toggle('active',b.dataset.mode===mode));
+ const d=modeDescriptions[mode]||modeDescriptions['3d'];
+ document.querySelector('#viewInfoTitle').textContent=d[0];
+ document.querySelector('#viewInfoTag').textContent=d[1];
+ document.querySelector('#viewInfoText').textContent=d[2];
+ if(mode==='3d'||mode==='normal'||mode==='tower'){setSector('overview');animateCamera(new THREE.Vector3(0,88,42),new THREE.Vector3(0,0,1));}
+ if(mode==='map2d'){setSector('overview');animateCamera(new THREE.Vector3(0,105,.01),new THREE.Vector3(0,0,0));}
+ if(mode==='aisle'||mode==='space'){setSector('armazem');animateCamera(new THREE.Vector3(-9,24,29),new THREE.Vector3(-10,0,-5));}
+ if(mode==='heat'){
+  setSector('overview');
+  sectorGroups.armazem?.traverse(o=>{if(o.isMesh&&o.material&&o.material.color){o.material=o.material.clone();o.material.emissive=new THREE.Color('#1b3858');o.material.emissiveIntensity=.24}});
+  animateCamera(new THREE.Vector3(0,82,40),new THREE.Vector3(0,0,0));
+ }
+ if(mode==='sku'){startShipment();}
+}
+document.querySelectorAll('.modeBtn').forEach(b=>b.addEventListener('click',()=>setMode(b.dataset.mode)));
+
 const clock=new THREE.Clock();function render(now){requestAnimationFrame(render);controls.update();if(camAnim){const k=Math.min(1,(now-camAnim.start)/camAnim.dur),e=k*k*(3-2*k);camera.position.lerpVectors(camAnim.from,camAnim.to,e);controls.target.lerpVectors(camAnim.tf,camAnim.tt,e);if(k>=1)camAnim=null}if(shipmentAnimating){
  const elapsed=Math.max(0,(now-shipmentLastTime)/1000);shipmentLastTime=now;
  shipmentProgress=Math.min(1,shipmentProgress+elapsed/32);
