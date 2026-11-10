@@ -94,7 +94,7 @@ function markerIcon(v){
  const status=v.status||'Em operação';const cl=v.type==='Utilitário de apoio'?'support':status==='Parado'||status==='Em manutenção'?'stop':status==='Em deslocamento'?'warn':'';
  return L.divIcon({className:'',html:'<div class="vehiclePin '+cl+'">▰</div>',iconSize:[34,34],iconAnchor:[17,17]});
 }
-function materialPosition(w,i){
+function vehiclePosition(v){const s=(v.location||'').toLowerCase();if(s.includes('niter'))return geo.nit;if(s.includes('ita'))return geo.ita;if(s.includes('oceân')||s.includes('ocean'))return geo.ocean;if(s.includes('comun')||s.includes('acesso'))return geo.special;if(s.includes('são gonçalo')||s.includes('sao goncalo'))return geo.sg;return vehicleGeo[v.id]||geo.base}\nfunction materialPosition(w,i){
  const s=(w.origin||'').toLowerCase();
  if(s.includes('niter'))return geo.nit;if(s.includes('ita'))return geo.ita;
  if(s.includes('oceân')||s.includes('ocean'))return geo.ocean;if(s.includes('comun')||s.includes('acesso'))return geo.special;
@@ -107,12 +107,12 @@ function renderOpsMap(){
  const show=k=>opsFilter==='all'||opsFilter===k;
  if(show('routes'))routeGeo.forEach((r,i)=>L.polyline(r.points,{color:['#169b8e','#397eac','#bb8747','#777fa2'][i],weight:5,opacity:.8,dashArray:'10 9'}).addTo(opsLayers.routes).bindPopup('<b>'+r.id+'</b><br>'+r.name+'<br>Trajeto ilustrativo até a unidade de triagem'));
  if(show('fleet'))vehicles.forEach(v=>{
-  const p=vehicleGeo[v.id]||geo.base;const marker=L.marker(p,{icon:markerIcon(v)}).addTo(opsLayers.fleet);
+  const p=vehiclePosition(v);const marker=L.marker(p,{icon:markerIcon(v)}).addTo(opsLayers.fleet);
   const related=wastes.filter(w=>w.vehicle===v.id),occ=incidents.filter(x=>x.vehicle===v.id);
   marker.on('click',()=>{$('mapDetail').innerHTML='<b>'+escMap(v.id)+' · '+escMap(v.type)+'</b><br>Status: '+escMap(v.status)+'<br>Referência: '+escMap(v.location)+'<br>Observação: '+escMap(v.note||'—')+'<br><br><b>Cargas vinculadas:</b> '+related.length+'<br>'+related.map(w=>escMap(w.os)+' · '+escMap(w.material)+' · '+Number(w.weight).toLocaleString('pt-BR')+' kg · '+escMap(w.stage)).join('<br>')+'<br><br><b>Ocorrências:</b> '+occ.length+(occ.length?'<br>'+occ.map(o=>escMap(o.type)+' · '+escMap(o.region)).join('<br>'):'')});
   marker.bindPopup('<b>'+escMap(v.id)+'</b><br>'+escMap(v.status)+'<br>'+escMap(v.location)+'<br>'+related.length+' carga(s) vinculada(s)');
  });
- if(show('materials'))wastes.forEach((w,i)=>{
+ if(show('materials')){L.marker(geo.hub,{icon:L.divIcon({className:'',html:'<div style="padding:5px 8px;border-radius:6px;background:#123b42;border:2px solid #39d4c2;color:#e8fffb;font-size:10px;font-weight:800;white-space:nowrap">CENTRAL DE TRIAGEM</div>',iconSize:[130,26],iconAnchor:[65,13]})}).addTo(opsLayers.materials).bindPopup('<b>Central de triagem</b><br>Recebimento, pesagem, classificação e expedição');wastes.forEach((w,i)=>{
   const marker=L.marker(materialPosition(w,i),{icon:L.divIcon({className:'',html:'<div class="materialPin">♻</div>',iconSize:[27,27],iconAnchor:[13,13]})}).addTo(opsLayers.materials);
   marker.on('click',()=>{$('mapDetail').innerHTML='<b>'+escMap(w.os)+' · '+escMap(w.material)+'</b><br>Origem: '+escMap(w.origin)+'<br>Peso registrado: '+Number(w.weight).toLocaleString('pt-BR')+' kg<br>Veículo: '+escMap(w.vehicle)+'<br>Etapa: '+escMap(w.stage)+'<br>Destino: '+escMap(w.destination||'A definir')+'<br>Comprovante: '+escMap(w.proof||'Não informado')});
   marker.bindPopup('<b>'+escMap(w.material)+'</b><br>'+escMap(w.origin)+'<br>'+Number(w.weight).toLocaleString('pt-BR')+' kg · '+escMap(w.stage));
