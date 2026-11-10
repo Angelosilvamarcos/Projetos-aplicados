@@ -66,17 +66,72 @@ let incidents=JSON.parse(localStorage.getItem('jslIncidents')||'[]');
 const $=id=>document.getElementById(id);
 function save(){localStorage.setItem('jslVehicles',JSON.stringify(vehicles));localStorage.setItem('jslWastes',JSON.stringify(wastes));localStorage.setItem('jslIncidents',JSON.stringify(incidents));}
 function toast(s){$('toast').textContent=s;$('toast').style.display='block';setTimeout(()=>$('toast').style.display='none',2600)}
-function showTab(tab){document.querySelectorAll('main>section').forEach(x=>x.classList.add('hidden'));$(tab).classList.remove('hidden');document.querySelectorAll('.nav button').forEach(b=>b.classList.toggle('active',b.dataset.tab===tab));render()}
+function showTab(tab){document.querySelectorAll('main>section').forEach(x=>x.classList.add('hidden'));$(tab).classList.remove('hidden');document.querySelectorAll('.nav button').forEach(b=>b.classList.toggle('active',b.dataset.tab===tab));render();if(tab==='mapa'){initOpsMap();setTimeout(()=>opsMap&&opsMap.invalidateSize(),180)}}
 function fillSelects(){['vehicleId','incidentVehicle','wVehicle'].forEach(id=>$(id).innerHTML=vehicles.map(v=>'<option>'+v.id+'</option>').join(''))}
 function statusPill(s){let c=s==='Parado'||s==='Em manutenção'?'danger':s==='Em operação'?'':'warn';return '<span class="pill '+c+'">'+s+'</span>'}
 function renderFleet(){const html=vehicles.map(v=>'<div class="vehicle"><div><div class="vname">'+v.id+' · '+v.type+'</div><div class="vmeta">'+v.location+' · '+(v.note||'')+'</div></div>'+statusPill(v.status)+'</div>').join('');$('fleetSummary').innerHTML=html;$('fleetList').innerHTML=html;$('kVehicles').textContent=vehicles.length;$('kActive').textContent=vehicles.filter(v=>v.status==='Em operação'||v.status==='Em deslocamento').length}
 function renderWaste(){let total=wastes.reduce((a,w)=>a+Number(w.weight),0);$('kRecords').textContent=wastes.length;$('kWeight').textContent=(total/1000).toFixed(2).replace('.',',')+' t';$('wCount').textContent=wastes.length;$('wTotal').textContent=(total/1000).toFixed(2).replace('.',',')+' t';$('wPending').textContent=wastes.filter(w=>w.stage!=='Destinado').length;$('wDone').textContent=wastes.filter(w=>w.stage==='Destinado').length;$('wasteRows').innerHTML=wastes.slice().reverse().map(w=>'<tr><td>'+w.date+'<br><span class="muted">'+w.os+'</span></td><td>'+w.origin+'</td><td>'+w.material+'</td><td>'+Number(w.weight).toLocaleString('pt-BR')+' kg</td><td>'+w.vehicle+'</td><td>'+statusPill(w.stage)+'</td><td>'+(w.destination||'—')+'</td><td><button onclick="advanceWaste('+w.id+')">Avançar etapa</button></td></tr>').join('')||'<tr><td colspan="8" class="empty">Nenhum registro cadastrado.</td></tr>'}
 function renderIncidents(){$('incidentList').innerHTML=incidents.slice().reverse().map(i=>'<div class="vehicle"><div><div class="vname">'+i.type+' · '+i.vehicle+'</div><div class="vmeta">'+i.region+' · '+i.description+'</div><div class="vmeta">Impacto: '+i.impact+' · '+i.date+'</div></div><span class="pill danger">Sinalizada</span></div>').join('')||'<div class="empty">Nenhuma ocorrência registrada.</div>'}
-function render(){fillSelects();renderFleet();renderWaste();renderIncidents()}
+function render(){fillSelects();renderFleet();renderWaste();renderIncidents();if(opsMap)renderOpsMap()}
 $('vehicleForm').addEventListener('submit',e=>{e.preventDefault();let v=vehicles.find(x=>x.id===$('vehicleId').value);v.status=$('vehicleStatus').value;v.location=$('vehicleLocation').value;v.note=$('vehicleNote').value;save();render();e.target.reset();toast('Situação do veículo atualizada.')});
 $('incidentForm').addEventListener('submit',e=>{e.preventDefault();incidents.push({vehicle:$('incidentVehicle').value,type:$('incidentType').value,region:$('incidentRegion').value,impact:$('incidentImpact').value,description:$('incidentDescription').value,date:new Date().toLocaleString('pt-BR')});save();render();e.target.reset();toast('Ocorrência sinalizada no painel.')});
 $('wasteForm').addEventListener('submit',e=>{e.preventDefault();wastes.push({id:Date.now(),date:$('wDate').value,vehicle:$('wVehicle').value,os:$('wOS').value,origin:$('wOrigin').value,material:$('wMaterial').value,weight:Number($('wWeight').value),stage:$('wStage').value,destination:$('wDestination').value||$('wProof').value});save();render();e.target.reset();$('wDate').value=new Date().toISOString().slice(0,10);toast('Registro de resíduo salvo.')});
 function advanceWaste(id){let w=wastes.find(x=>x.id===id);let stages=['Coletado','Em transporte','Aguardando triagem','Em triagem','Destinado'];w.stage=stages[Math.min(stages.indexOf(w.stage)+1,4)];save();render();toast('Etapa atualizada: '+w.stage)}
+
+let opsMap=null,opsLayers={},opsFilter='all';
+const geo={sg:[-22.8268,-43.0634],nit:[-22.8832,-43.1034],ita:[-22.7444,-42.8594],ocean:[-22.956,-43.044],alc:[-22.805,-43.008],base:[-22.812,-43.075],hub:[-22.817,-43.045],special:[-22.862,-43.020]};
+const vehicleGeo={'JSL-101':geo.sg,'JSL-102':geo.nit,'JSL-103':geo.ita,'JSL-104':geo.alc,'JSL-611':geo.base,'JSL-612':geo.special};
+const routeGeo=[{id:'Rota 01',name:'São Gonçalo · Centro',points:[geo.sg,[-22.818,-43.055],[-22.809,-43.045],geo.hub]},{id:'Rota 02',name:'Niterói · Região Oceânica',points:[geo.nit,[-22.895,-43.085],[-22.875,-43.062],geo.hub]},{id:'Rota 03',name:'Itaboraí · Ponto 04',points:[geo.ita,[-22.762,-42.905],[-22.794,-42.975],geo.hub]},{id:'Rota 04',name:'Acesso especial · referência',points:[geo.special,[-22.850,-43.032],[-22.835,-43.040],geo.hub]}];
+function escMap(v){return String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function initOpsMap(){
+ if(opsMap||!window.L||!$('opsMap'))return;
+ opsMap=L.map('opsMap',{zoomControl:true,scrollWheelZoom:true}).setView([-22.835,-43.025],10);
+ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,attribution:'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'}).addTo(opsMap);
+ ['routes','fleet','materials','incidents'].forEach(k=>opsLayers[k]=L.layerGroup().addTo(opsMap));
+ renderOpsMap();setTimeout(()=>opsMap.invalidateSize(),180);
+}
+function markerIcon(v){
+ const status=v.status||'Em operação';const cl=v.type==='Utilitário de apoio'?'support':status==='Parado'||status==='Em manutenção'?'stop':status==='Em deslocamento'?'warn':'';
+ return L.divIcon({className:'',html:'<div class="vehiclePin '+cl+'">▰</div>',iconSize:[34,34],iconAnchor:[17,17]});
+}
+function materialPosition(w,i){
+ const s=(w.origin||'').toLowerCase();
+ if(s.includes('niter'))return geo.nit;if(s.includes('ita'))return geo.ita;
+ if(s.includes('oceân')||s.includes('ocean'))return geo.ocean;if(s.includes('comun')||s.includes('acesso'))return geo.special;
+ if(s.includes('são gonçalo')||s.includes('sao goncalo'))return geo.sg;
+ const p=vehicleGeo[w.vehicle]||geo.sg;return [p[0]+(i%3-1)*.004,p[1]+(i%2?-.005:.005)];
+}
+function renderOpsMap(){
+ if(!opsMap){initOpsMap();return}
+ Object.values(opsLayers).forEach(l=>l.clearLayers());
+ const show=k=>opsFilter==='all'||opsFilter===k;
+ if(show('routes'))routeGeo.forEach((r,i)=>L.polyline(r.points,{color:['#169b8e','#397eac','#bb8747','#777fa2'][i],weight:5,opacity:.8,dashArray:'10 9'}).addTo(opsLayers.routes).bindPopup('<b>'+r.id+'</b><br>'+r.name+'<br>Trajeto ilustrativo até a unidade de triagem'));
+ if(show('fleet'))vehicles.forEach(v=>{
+  const p=vehicleGeo[v.id]||geo.base;const marker=L.marker(p,{icon:markerIcon(v)}).addTo(opsLayers.fleet);
+  const related=wastes.filter(w=>w.vehicle===v.id),occ=incidents.filter(x=>x.vehicle===v.id);
+  marker.on('click',()=>{$('mapDetail').innerHTML='<b>'+escMap(v.id)+' · '+escMap(v.type)+'</b><br>Status: '+escMap(v.status)+'<br>Referência: '+escMap(v.location)+'<br>Observação: '+escMap(v.note||'—')+'<br><br><b>Cargas vinculadas:</b> '+related.length+'<br>'+related.map(w=>escMap(w.os)+' · '+escMap(w.material)+' · '+Number(w.weight).toLocaleString('pt-BR')+' kg · '+escMap(w.stage)).join('<br>')+'<br><br><b>Ocorrências:</b> '+occ.length+(occ.length?'<br>'+occ.map(o=>escMap(o.type)+' · '+escMap(o.region)).join('<br>'):'')});
+  marker.bindPopup('<b>'+escMap(v.id)+'</b><br>'+escMap(v.status)+'<br>'+escMap(v.location)+'<br>'+related.length+' carga(s) vinculada(s)');
+ });
+ if(show('materials'))wastes.forEach((w,i)=>{
+  const marker=L.marker(materialPosition(w,i),{icon:L.divIcon({className:'',html:'<div class="materialPin">♻</div>',iconSize:[27,27],iconAnchor:[13,13]})}).addTo(opsLayers.materials);
+  marker.on('click',()=>{$('mapDetail').innerHTML='<b>'+escMap(w.os)+' · '+escMap(w.material)+'</b><br>Origem: '+escMap(w.origin)+'<br>Peso registrado: '+Number(w.weight).toLocaleString('pt-BR')+' kg<br>Veículo: '+escMap(w.vehicle)+'<br>Etapa: '+escMap(w.stage)+'<br>Destino: '+escMap(w.destination||'A definir')+'<br>Comprovante: '+escMap(w.proof||'Não informado')});
+  marker.bindPopup('<b>'+escMap(w.material)+'</b><br>'+escMap(w.origin)+'<br>'+Number(w.weight).toLocaleString('pt-BR')+' kg · '+escMap(w.stage));
+ });
+ if(show('incidents'))incidents.forEach((o,i)=>{
+  const p=vehicleGeo[o.vehicle]||geo.special;
+  const marker=L.circleMarker([p[0]+.002*(i+1),p[1]+.002*(i+1)],{radius:9,color:'#ff7272',fillColor:'#ff7272',fillOpacity:.9,weight:2}).addTo(opsLayers.incidents);
+  marker.on('click',()=>{$('mapDetail').innerHTML='<b>'+escMap(o.type)+' · '+escMap(o.vehicle)+'</b><br>Local: '+escMap(o.region)+'<br>Impacto: '+escMap(o.impact)+'<br>Descrição: '+escMap(o.description)+'<br>Registro: '+escMap(o.date)});
+  marker.bindPopup('<b>Ocorrência · '+escMap(o.vehicle)+'</b><br>'+escMap(o.type)+'<br>'+escMap(o.region)+' · '+escMap(o.impact));
+ });
+ $('mapVehicleCount').textContent=String(vehicles.length).padStart(2,'0');
+ $('mapOnRoute').textContent=String(vehicles.filter(v=>v.status==='Em operação'||v.status==='Em deslocamento').length).padStart(2,'0');
+ $('mapMaterialCount').textContent=String(wastes.length).padStart(2,'0');$('mapIncidentCount').textContent=String(incidents.length).padStart(2,'0');
+ $('mapFeed').innerHTML=[...wastes.slice().reverse().slice(0,5).map(w=>'<div class="mapFeedItem"><b>♻ '+escMap(w.os)+' · '+escMap(w.material)+'</b>'+escMap(w.origin)+' · '+Number(w.weight).toLocaleString('pt-BR')+' kg<br>Etapa: '+escMap(w.stage)+' · Veículo: '+escMap(w.vehicle)+'</div>'),...incidents.slice().reverse().slice(0,3).map(o=>'<div class="mapFeedItem"><b>! '+escMap(o.type)+' · '+escMap(o.vehicle)+'</b>'+escMap(o.region)+' · Impacto '+escMap(o.impact)+'</div>')].join('')||'<div class="muted">Nenhuma movimentação registrada.</div>';
+ $('mapTime').textContent='ATUALIZADO '+new Date().toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});
+}
+function setMapFilter(f){opsFilter=f;document.querySelectorAll('[data-mapfilter]').forEach(b=>b.classList.toggle('active',b.dataset.mapfilter===f));renderOpsMap()}
+function fitOpsMap(){if(opsMap)opsMap.fitBounds([[-22.98,-43.18],[-22.70,-42.82]],{padding:[20,20]})}
+
 function exportData(){let rows=[['Data','OS','Origem','Material','Peso kg','Veículo','Etapa','Destino'],...wastes.map(w=>[w.date,w.os,w.origin,w.material,w.weight,w.vehicle,w.stage,w.destination])];let csv=rows.map(r=>r.map(x=>'"'+String(x??'').replaceAll('"','""')+'"').join(';')).join('\n');let a=document.createElement('a');a.href=URL.createObjectURL(new Blob(['\ufeff'+csv],{type:'text/csv;charset=utf-8'}));a.download='jsl-controle-residuos.csv';a.click();URL.revokeObjectURL(a.href)}
 $('wDate').value=new Date().toISOString().slice(0,10);render();
 </script></body></html>
