@@ -112,7 +112,8 @@ function markerIcon(v){
  const status=v.status||'Em operação';const cl=v.type==='Utilitário de apoio'?'support':status==='Parado'||status==='Em manutenção'?'stop':status==='Em deslocamento'?'warn':'';
  return L.divIcon({className:'',html:'<div class="vehiclePin '+cl+'">▰</div>',iconSize:[34,34],iconAnchor:[17,17]});
 }
-function vehiclePosition(v){const s=(v.location||'').toLowerCase();if(s.includes('niter'))return geo.nit;if(s.includes('ita'))return geo.ita;if(s.includes('oceân')||s.includes('ocean'))return geo.ocean;if(s.includes('comun')||s.includes('acesso'))return geo.special;if(s.includes('são gonçalo')||s.includes('sao goncalo'))return geo.sg;return vehicleGeo[v.id]||geo.base}\nfunction materialPosition(w,i){
+function vehiclePosition(v){const s=(v.location||'').toLowerCase();if(s.includes('niter'))return geo.nit;if(s.includes('ita'))return geo.ita;if(s.includes('oceân')||s.includes('ocean'))return geo.ocean;if(s.includes('comun')||s.includes('acesso'))return geo.special;if(s.includes('são gonçalo')||s.includes('sao goncalo'))return geo.sg;return vehicleGeo[v.id]||geo.base}
+function materialPosition(w,i){
  const s=(w.origin||'').toLowerCase();
  if(s.includes('niter'))return geo.nit;if(s.includes('ita'))return geo.ita;
  if(s.includes('oceân')||s.includes('ocean'))return geo.ocean;if(s.includes('comun')||s.includes('acesso'))return geo.special;
@@ -164,7 +165,8 @@ function renderTeams(){
  if(classTeams.some(t=>t.id===activeTeamId))$("activeTeamSelect").value=activeTeamId;
  else if(classTeams.length){activeTeamId=classTeams[0].id;$("activeTeamSelect").value=activeTeamId;saveTeams()}
  $("nextTeamBtn").disabled=classTeams.length<2;
- renderChallengeMap();\n $("teamTurnLabel").innerHTML=classTeams.length?'<span class="teamTurn">Vez de: '+escapeHtml(classTeams.find(t=>t.id===activeTeamId)?.name||"equipe")+'</span> · A pontuação é salva neste navegador.':'Aguardando cadastro das equipes';
+ renderChallengeMap();
+ $("teamTurnLabel").innerHTML=classTeams.length?'<span class="teamTurn">Vez de: '+escapeHtml(classTeams.find(t=>t.id===activeTeamId)?.name||"equipe")+'</span> · A pontuação é salva neste navegador.':'Aguardando cadastro das equipes';
 }
 function renderChallengeMap(){
  const host=$("mapTeamMarkers");if(!host)return;
