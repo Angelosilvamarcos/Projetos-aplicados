@@ -116,7 +116,7 @@ function renderOpsMap(){
   const marker=L.marker(materialPosition(w,i),{icon:L.divIcon({className:'',html:'<div class="materialPin">♻</div>',iconSize:[27,27],iconAnchor:[13,13]})}).addTo(opsLayers.materials);
   marker.on('click',()=>{$('mapDetail').innerHTML='<b>'+escMap(w.os)+' · '+escMap(w.material)+'</b><br>Origem: '+escMap(w.origin)+'<br>Peso registrado: '+Number(w.weight).toLocaleString('pt-BR')+' kg<br>Veículo: '+escMap(w.vehicle)+'<br>Etapa: '+escMap(w.stage)+'<br>Destino: '+escMap(w.destination||'A definir')+'<br>Comprovante: '+escMap(w.proof||'Não informado')});
   marker.bindPopup('<b>'+escMap(w.material)+'</b><br>'+escMap(w.origin)+'<br>'+Number(w.weight).toLocaleString('pt-BR')+' kg · '+escMap(w.stage));
- });
+ });}
  if(show('incidents'))incidents.forEach((o,i)=>{
   const p=vehicleGeo[o.vehicle]||geo.special;
   const marker=L.circleMarker([p[0]+.002*(i+1),p[1]+.002*(i+1)],{radius:9,color:'#ff7272',fillColor:'#ff7272',fillOpacity:.9,weight:2}).addTo(opsLayers.incidents);
